@@ -9,7 +9,7 @@ tls:
     certfiles:
 
 ca:
-  name: insurance-org
+  name: supplier1-org
   keyfile: ./ca/key.pem
   certfile: ./ca/cert.pem
   chainfile: ./ca/cert.pem
@@ -60,7 +60,7 @@ csr:
     O: "IBM"
     OU: "Cloud"
   hosts:
-  - insurance-ca
+  - supplier1-ca
   - localhost
   ca:
     expiry: 131400h
