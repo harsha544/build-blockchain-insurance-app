@@ -1,60 +1,51 @@
 ---
 Profiles:
-  FourOrgsGenesis:
+  ThreeOrgsGenesis:
     Orderer:
       <<: *OrdererDefaults
       Organizations:
       - *OrdererOrg
     Consortiums:
-      InsuranceConsortium:
+      SupplierConsortium:
         Organizations:
-        - *InsuranceOrg
-        - *ShopOrg
-        - *RepairShopOrg
-        - *PoliceOrg
-  FourOrgsChannel:
-    Consortium: InsuranceConsortium
+        - *Supplier1Org
+        - *Supplier2Org
+        - *Supplier3Org
+  ThreeOrgsChannel:
+    Consortium: SupplierConsortium
     Application:
       <<: *ApplicationDefaults
       Organizations:
-      - *InsuranceOrg
-      - *ShopOrg
-      - *RepairShopOrg
-      - *PoliceOrg
+      - *Supplier1Org
+      - *Supplier2Org
+      - *Supplier3Org
 
 Organizations:
 - &OrdererOrg
   Name: OrdererOrg
   ID: OrdererMSP
   MSPDir: cli/peers/ordererOrganizations/orderer-org/msp
-- &InsuranceOrg
-  Name: InsuranceOrgMSP
-  ID: InsuranceOrgMSP
-  MSPDir: cli/peers/peerOrganizations/insurance-org/msp
+- &Supplier1Org
+  Name: Supplier1OrgMSP
+  ID: Supplier1OrgMSP
+  MSPDir: cli/peers/peerOrganizations/supplier1/msp
   AnchorPeers:
-  - Host: insurance-peer
+  - Host: supplier1-peer
     Port: 7051
-- &ShopOrg
-  Name: ShopOrgMSP
-  ID: ShopOrgMSP
-  MSPDir: cli/peers/peerOrganizations/shop-org/msp
+- &Supplier2Org
+  Name: Supplier2OrgMSP
+  ID: Supplier2OrgMSP
+  MSPDir: cli/peers/peerOrganizations/supplier2/msp
   AnchorPeers:
-  - Host: shop-peer
+  - Host: supplier2-peer
     Port: 7051
-- &RepairShopOrg
-  Name: RepairShopOrgMSP
-  ID: RepairShopOrgMSP
-  MSPDir: cli/peers/peerOrganizations/repairshop-org/msp
+- &Supplier3Org
+  Name: Supplier3OrgMSP
+  ID: Supplier3OrgMSP
+  MSPDir: cli/peers/peerOrganizations/supplier3-org/msp
   AnchorPeers:
-  - Host: repairshop-peer
+  - Host: supplier3-peer
     Port: 7051
-- &PoliceOrg
-    Name: PoliceOrgMSP
-    ID: PoliceOrgMSP
-    MSPDir: cli/peers/peerOrganizations/police-org/msp
-    AnchorPeers:
-    - Host: police-peer
-      Port: 7051
 
 Orderer: &OrdererDefaults
   OrdererType: solo

@@ -1,8 +1,8 @@
 version: '2'
 
 services:
-  insurance-ca:
-    container_name: insurance-ca
+  supplier1-ca:
+    container_name: supplier1-ca
     extends:
       file: ./ca-base.yaml
       service: ca-base
@@ -10,8 +10,8 @@ services:
     ports:
     - 7054:7054
 
-  shop-ca:
-    container_name: shop-ca
+  supplier2-ca:
+    container_name: supplier2-ca
     extends:
       file: ./ca-base.yaml
       service: ca-base
@@ -19,8 +19,8 @@ services:
     ports:
     - 8054:7054
 
-  repairshop-ca:
-    container_name: repairshop-ca
+  supplier3-ca:
+    container_name: supplier3-ca
     extends:
       file: ./ca-base.yaml
       service: ca-base
@@ -28,14 +28,14 @@ services:
     ports:
     - 9054:7054
 
-  police-ca:
-    container_name: police-ca
-    extends:
-      file: ./ca-base.yaml
-      service: ca-base
-    image: police-ca
-    ports:
-    - 10054:7054
+#  supplier4-ca:
+#    container_name: supplier4-ca
+#    extends:
+#      file: ./ca-base.yaml
+#      service: ca-base
+#    image: police-ca
+#    ports:
+#    - 10054:7054
 
   orderer0:
     container_name: orderer0
@@ -56,16 +56,16 @@ services:
     ports:
     - 7050:7050
 
-  insurance-peer:
-    container_name: insurance-peer
+  supplier1:
+    container_name: supplier1
     extends:
       file: ./peer-base.yaml
       service: peer-base
-    image: insurance-peer
+    image: supplier1
     environment:
-    - CORE_PEER_ID=insurance-peer
-    - CORE_PEER_ADDRESS=insurance-peer:7051
-    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=insurance-peer:7051
+    - CORE_PEER_ID=supplier1
+    - CORE_PEER_ADDRESS=supplier1:7051
+    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=supplier1:7051
     - CORE_PEER_LOCALMSPID=InsuranceOrgMSP
     ports:
     - 7051:7051
@@ -73,79 +73,79 @@ services:
     depends_on:
     - orderer0
 
-  shop-peer:
-    container_name: shop-peer
+  supplier2:
+    container_name: supplier2
     extends:
       file: ./peer-base.yaml
       service: peer-base
-    image: shop-peer
+    image: supplier2
     environment:
-    - CORE_PEER_ID=shop-peer
-    - CORE_PEER_ADDRESS=shop-peer:7051
-    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=shop-peer:7051
+    - CORE_PEER_ID=supplier2
+    - CORE_PEER_ADDRESS=supplier2:7051
+    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=supplier2:7051
     - CORE_PEER_LOCALMSPID=ShopOrgMSP
     ports:
     - 8051:7051
     - 8053:7053
     depends_on:
     - orderer0
-    - insurance-peer
+    - supplier1
 
-  repairshop-peer:
-    container_name: repairshop-peer
+  supplier3:
+    container_name: supplier3
     extends:
       file: ./peer-base.yaml
       service: peer-base
-    image: repairshop-peer
+    image: supplier3
     environment:
-    - CORE_PEER_ID=repairshop-peer
-    - CORE_PEER_ADDRESS=repairshop-peer:7051
-    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=repairshop-peer:7051
+    - CORE_PEER_ID=supplier3
+    - CORE_PEER_ADDRESS=supplier3:7051
+    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=supplier3:7051
     - CORE_PEER_LOCALMSPID=RepairShopOrgMSP
     ports:
     - 9051:7051
     - 9053:7053
     depends_on:
     - orderer0
-    - insurance-peer
-    - shop-peer
+    - supplier1
+    - supplier2
 
-  police-peer:
-    container_name: police-peer
-    extends:
-      file: ./peer-base.yaml
-      service: peer-base
-    image: police-peer
-    environment:
-    - CORE_PEER_ID=police-peer
-    - CORE_PEER_ADDRESS=police-peer:7051
-    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=police-peer:7051
-    - CORE_PEER_LOCALMSPID=PoliceOrgMSP
-    ports:
-    - 10051:7051
-    - 10053:7053
-    depends_on:
-    - orderer0
-    - insurance-peer
-    - shop-peer
-    - repairshop-peer
+#  supplier4:
+#    container_name: supplier4
+#    extends:
+#      file: ./peer-base.yaml
+#      service: peer-base
+#    image: supplier4
+#    environment:
+#    - CORE_PEER_ID=supplier4
+#    - CORE_PEER_ADDRESS=supplier4:7051
+#    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=supplier4:7051
+#    - CORE_PEER_LOCALMSPID=PoliceOrgMSP
+#    ports:
+#    - 10051:7051
+#    - 10053:7053
+#    depends_on:
+#    - orderer0
+#    - supplier1
+#    - supplier2
+#    - supplier3
 
-  web:
-    container_name: web
-    image: web
-    environment:
-    - PORT=3000
-    - DOCKER_SOCKET_PATH=/host/var/run/docker.sock
-    - DOCKER_CCENV_IMAGE=hyperledger/fabric-ccenv:x86_64-1.1.0
-    ports:
-    - 3000:3000
-    volumes:
-    - /var/run/:/host/var/run/
-    depends_on:
-    - orderer0
-    - insurance-ca
-    - insurance-peer
-    - shop-ca
-    - shop-peer
-    - repairshop-ca
-    - repairshop-peer
+#  web:
+#    container_name: web
+#    image: web
+#    environment:
+#    - PORT=3000
+#    - DOCKER_SOCKET_PATH=/host/var/run/docker.sock
+#    - DOCKER_CCENV_IMAGE=hyperledger/fabric-ccenv:x86_64-1.1.0
+#    ports:
+#    - 3000:3000
+#    volumes:
+#    - /var/run/:/host/var/run/
+#    depends_on:
+#    - orderer0
+#    - supplier1-ca
+#    - supplier1
+#    - supplier2-ca
+#    - supplier2
+#    - supplier3-ca
+#    - supplier3
