@@ -8,34 +8,30 @@ echo
 echo "##########################################################"
 echo "#########  Generating Orderer Genesis block ##############"
 echo "##########################################################"
-$PROJPATH/configtxgen -profile FourOrgsGenesis -outputBlock $CLIPATH/genesis.block
+$PROJPATH/configtxgen -profile ThreeOrgsGenesis -outputBlock $CLIPATH/genesis.block
 
 echo
 echo "#################################################################"
 echo "### Generating channel configuration transaction 'channel.tx' ###"
 echo "#################################################################"
-$PROJPATH/configtxgen -profile FourOrgsChannel -outputCreateChannelTx $CLIPATH/channel.tx -channelID $CHANNEL_NAME
+$PROJPATH/configtxgen -profile ThreeOrgsChannel -outputCreateChannelTx $CLIPATH/channel.tx -channelID $CHANNEL_NAME
 cp $CLIPATH/channel.tx $PROJPATH/web
-echo
-echo "#################################################################"
-echo "####### Generating anchor peer update for InsuranceOrg ##########"
-echo "#################################################################"
-$PROJPATH/configtxgen -profile FourOrgsChannel -outputAnchorPeersUpdate $CLIPATH/InsuranceOrgMSPAnchors.tx -channelID $CHANNEL_NAME -asOrg InsuranceOrgMSP
 
 echo
 echo "#################################################################"
-echo "#######    Generating anchor peer update for ShopOrg   ##########"
+echo "####### Generating anchor peer update for Supplier1Org ##########"
 echo "#################################################################"
-$PROJPATH/configtxgen -profile FourOrgsChannel -outputAnchorPeersUpdate $CLIPATH/ShopOrgMSPAnchors.tx -channelID $CHANNEL_NAME -asOrg ShopOrgMSP
+$PROJPATH/configtxgen -profile ThreeOrgsChannel -outputAnchorPeersUpdate $CLIPATH/Supplier1OrgMSPAnchors.tx -channelID $CHANNEL_NAME -asOrg Supplier1OrgMSP
+
+echo
+echo "#################################################################"
+echo "#######    Generating anchor peer update for Supplier2Org #######"
+echo "#################################################################"
+$PROJPATH/configtxgen -profile ThreeOrgsChannel -outputAnchorPeersUpdate $CLIPATH/Supplier2OrgMSPAnchors.tx -channelID $CHANNEL_NAME -asOrg Supplier2OrgMSP
 
 echo
 echo "##################################################################"
-echo "####### Generating anchor peer update for RepairShopOrg ##########"
+echo "####### Generating anchor peer update for Supplier3Org  ##########"
 echo "##################################################################"
-$PROJPATH/configtxgen -profile FourOrgsChannel -outputAnchorPeersUpdate $CLIPATH/RepairShopOrgMSPAnchors.tx -channelID $CHANNEL_NAME -asOrg RepairShopOrgMSP
+$PROJPATH/configtxgen -profile ThreeOrgsChannel -outputAnchorPeersUpdate $CLIPATH/Supplier3OrgMSPAnchors.tx -channelID $CHANNEL_NAME -asOrg Supplier3OrgMSP
 
-echo
-echo "##################################################################"
-echo "#######   Generating anchor peer update for PoliceOrg   ##########"
-echo "##################################################################"
-$PROJPATH/configtxgen -profile FourOrgsChannel -outputAnchorPeersUpdate $CLIPATH/PoliceOrgMSPAnchors.tx -channelID $CHANNEL_NAME -asOrg PoliceOrgMSP
