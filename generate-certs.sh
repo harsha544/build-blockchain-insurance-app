@@ -49,17 +49,3 @@ mv $SUPPLIER2CA/ca/*_sk $SUPPLIER2CA/ca/key.pem
 mv $SUPPLIER2CA/ca/*-cert.pem $SUPPLIER2CA/ca/cert.pem
 mv $SUPPLIER2CA/tls/*_sk $SUPPLIER2CA/tls/key.pem
 mv $SUPPLIER2CA/tls/*-cert.pem $SUPPLIER2CA/tls/cert.pem
-
-WEBCERTS=$PROJPATH/web/certs
-rm -rf $WEBCERTS
-mkdir -p $WEBCERTS
-cp $PROJPATH/orderer/crypto/tls/ca.crt $WEBCERTS/ordererOrg.pem
-cp $PROJPATH/supplier1Peer/crypto/tls/ca.crt $WEBCERTS/supplier1Org.pem
-cp $PROJPATH/supplier3Peer/crypto/tls/ca.crt $WEBCERTS/supplier3Org.pem
-cp $PROJPATH/supplier2Peer/crypto/tls/ca.crt $WEBCERTS/supplier2Org.pem
-cp $PEERS/supplier1-org/users/Admin@supplier1-org/msp/keystore/* $WEBCERTS/Admin@supplier1-org-key.pem
-cp $PEERS/supplier1-org/users/Admin@supplier1-org/msp/signcerts/* $WEBCERTS/
-cp $PEERS/supplier2-org/users/Admin@supplier2-org/msp/keystore/* $WEBCERTS/Admin@supplier2-org-key.pem
-cp $PEERS/supplier2-org/users/Admin@supplier2-org/msp/signcerts/* $WEBCERTS/
-cp $PEERS/supplier3-org/users/Admin@supplier3-org/msp/keystore/* $WEBCERTS/Admin@supplier3-org-key.pem
-cp $PEERS/supplier3-org/users/Admin@supplier3-org/msp/signcerts/* $WEBCERTS/

@@ -61,7 +61,6 @@ if [ $BUILD ];
     docker build -t police-peer:latest policePeer/
     docker build -t shop-peer:latest shopPeer/
     docker build -t repairshop-peer:latest repairShopPeer/
-    docker build -t web:latest web/
     docker build -t insurance-ca:latest insuranceCA/
     docker build -t police-ca:latest policeCA/
     docker build -t shop-ca:latest shopCA/

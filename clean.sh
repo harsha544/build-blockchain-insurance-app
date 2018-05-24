@@ -1,7 +1,7 @@
 #!/bin/bash
 
 docker rm -f $(docker ps -aq)
-images=( web insurance-peer orderer police-peer repairshop-ca shop-ca police-ca insurance-ca repairshop-peer shop-peer )
+images=( insurance-peer orderer police-peer repairshop-ca shop-ca police-ca insurance-ca repairshop-peer shop-peer )
 for i in "${images[@]}"
 do
 	echo Removing image : $i
