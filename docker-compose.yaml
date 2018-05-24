@@ -6,7 +6,7 @@ services:
     extends:
       file: ./ca-base.yaml
       service: ca-base
-    image: insurance-ca
+    image: supplier1-ca
     ports:
     - 7054:7054
 
@@ -15,7 +15,7 @@ services:
     extends:
       file: ./ca-base.yaml
       service: ca-base
-    image: shop-ca
+    image: supplier2-ca
     ports:
     - 8054:7054
 
@@ -24,18 +24,9 @@ services:
     extends:
       file: ./ca-base.yaml
       service: ca-base
-    image: repairshop-ca
+    image: supplier3-ca
     ports:
     - 9054:7054
-
-#  supplier4-ca:
-#    container_name: supplier4-ca
-#    extends:
-#      file: ./ca-base.yaml
-#      service: ca-base
-#    image: police-ca
-#    ports:
-#    - 10054:7054
 
   orderer0:
     container_name: orderer0

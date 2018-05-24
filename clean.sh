@@ -1,7 +1,7 @@
 #!/bin/bash
 
 docker rm -f $(docker ps -aq)
-images=( insurance-peer orderer police-peer repairshop-ca shop-ca police-ca insurance-ca repairshop-peer shop-peer )
+images=( supplier1-peer orderer supplier3-ca supplier2-ca  supplier1-ca supplier3-peer supplier2-peer )
 for i in "${images[@]}"
 do
 	echo Removing image : $i
@@ -9,7 +9,7 @@ do
 done
 
 #docker rmi -f $(docker images | grep none)
-images=( dev-repairshop-peer dev-police-peer dev-insurance-peer dev-shop-peer)
+images=( dev-supplier3-peer dev-supplier1-peer dev-supplier2-peer)
 for i in "${images[@]}"
 do
 	echo Removing image : $i

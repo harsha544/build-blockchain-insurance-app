@@ -15,82 +15,65 @@ $PROJPATH/cryptogen generate --config=$PROJPATH/crypto-config.yaml --output=$CLI
 
 sh generate-cfgtx.sh
 
-# rm -rf $PROJPATH/{orderer,insurancePeer,policePeer,repairShopPeer,shopPeer}/crypto
+# rm -rf $PROJPATH/{orderer,supplier1Peer,supplier3Peer,supplier2Peer}/crypto
 rm -rf $PROJPATH/orderer/crypto
-rm -rf $PROJPATH/insurancePeer/crypto
-rm -rf $PROJPATH/policePeer/crypto
-rm -rf $PROJPATH/repairShopPeer/crypto
-rm -rf $PROJPATH/shopPeer/crypto
-# mkdir $PROJPATH/{orderer,insurancePeer,policePeer,repairShopPeer,shopPeer}/crypto
+rm -rf $PROJPATH/supplier1Peer/crypto
+rm -rf $PROJPATH/supplier3Peer/crypto
+rm -rf $PROJPATH/supplier2Peer/crypto
+# mkdir $PROJPATH/{orderer,supplier1Peer,supplier3Peer,supplier2Peer}/crypto
 mkdir $PROJPATH/orderer/crypto
-mkdir $PROJPATH/insurancePeer/crypto
-mkdir $PROJPATH/policePeer/crypto
-mkdir $PROJPATH/repairShopPeer/crypto
-mkdir $PROJPATH/shopPeer/crypto
+mkdir $PROJPATH/supplier1Peer/crypto
+mkdir $PROJPATH/supplier3Peer/crypto
+mkdir $PROJPATH/supplier2Peer/crypto
 # cp -r $ORDERERS/orderer-org/orderers/orderer0/{msp,tls} $PROJPATH/orderer/crypto
 cp -r $ORDERERS/orderer-org/orderers/orderer0/msp $PROJPATH/orderer/crypto
 cp -r $ORDERERS/orderer-org/orderers/orderer0/tls $PROJPATH/orderer/crypto
-# cp -r $PEERS/insurance-org/peers/insurance-peer/{msp,tls} $PROJPATH/insurancePeer/crypto
-cp -r $PEERS/insurance-org/peers/insurance-peer/msp $PROJPATH/insurancePeer/crypto
-cp -r $PEERS/insurance-org/peers/insurance-peer/tls $PROJPATH/insurancePeer/crypto
-# cp -r $PEERS/police-org/peers/police-peer/{msp,tls} $PROJPATH/policePeer/crypto
-cp -r $PEERS/police-org/peers/police-peer/msp $PROJPATH/policePeer/crypto
-cp -r $PEERS/police-org/peers/police-peer/tls $PROJPATH/policePeer/crypto
-# cp -r $PEERS/repairshop-org/peers/repairshop-peer/{msp,tls} $PROJPATH/repairShopPeer/crypto
-cp -r $PEERS/repairshop-org/peers/repairshop-peer/msp $PROJPATH/repairShopPeer/crypto
-cp -r $PEERS/repairshop-org/peers/repairshop-peer/tls $PROJPATH/repairShopPeer/crypto
-# cp -r $PEERS/shop-org/peers/shop-peer/{msp,tls} $PROJPATH/shopPeer/crypto
-cp -r $PEERS/shop-org/peers/shop-peer/msp $PROJPATH/shopPeer/crypto
-cp -r $PEERS/shop-org/peers/shop-peer/tls $PROJPATH/shopPeer/crypto
+# cp -r $PEERS/supplier1-org/peers/supplier1-peer/{msp,tls} $PROJPATH/supplier1Peer/crypto
+cp -r $PEERS/supplier1-org/peers/supplier1-peer/msp $PROJPATH/supplier1Peer/crypto
+cp -r $PEERS/supplier1-org/peers/supplier1-peer/tls $PROJPATH/supplier1Peer/crypto
+# cp -r $PEERS/supplier3-org/peers/supplier3-peer/{msp,tls} $PROJPATH/supplier3Peer/crypto
+cp -r $PEERS/supplier3-org/peers/supplier3-peer/msp $PROJPATH/supplier3Peer/crypto
+cp -r $PEERS/supplier3-org/peers/supplier3-peer/tls $PROJPATH/supplier3Peer/crypto
+# cp -r $PEERS/supplier2-org/peers/supplier2-peer/{msp,tls} $PROJPATH/supplier2Peer/crypto
+cp -r $PEERS/supplier2-org/peers/supplier2-peer/msp $PROJPATH/supplier2Peer/crypto
+cp -r $PEERS/supplier2-org/peers/supplier2-peer/tls $PROJPATH/supplier2Peer/crypto
 cp $CLIPATH/genesis.block $PROJPATH/orderer/crypto/
 
-INSURANCECAPATH=$PROJPATH/insuranceCA
-POLICECAPATH=$PROJPATH/policeCA
-REPAIRSHOPCAPATH=$PROJPATH/repairShopCA
-SHOPCAPATH=$PROJPATH/shopCA
+SUPPLIER1CAPATH=$PROJPATH/supplier1CA
+SUPPLIER3CAPATH=$PROJPATH/supplier3CA
+SUPPLIER2CAPATH=$PROJPATH/supplier2CA
 
-# rm -rf {$INSURANCECAPATH,$POLICECAPATH,$REPAIRSHOPCAPATH,$SHOPCAPATH}/{ca,tls}
-rm -rf $INSURANCECAPATH/ca
-rm -rf $POLICECAPATH/ca
-rm -rf $REPAIRSHOPCAPATH/ca
-rm -rf $SHOPCAPATH/ca
-rm -rf $INSURANCECAPATH/tls
-rm -rf $POLICECAPATH/tls
-rm -rf $REPAIRSHOPCAPATH/tls
-rm -rf $SHOPCAPATH/tls
-# mkdir -p {$INSURANCECAPATH,$POLICECAPATH,$REPAIRSHOPCAPATH,$SHOPCAPATH}/{ca,tls}
-mkdir -p $INSURANCECAPATH/ca
-mkdir -p $POLICECAPATH/ca
-mkdir -p $REPAIRSHOPCAPATH/ca
-mkdir -p $SHOPCAPATH/ca
-mkdir -p $INSURANCECAPATH/tls
-mkdir -p $POLICECAPATH/tls
-mkdir -p $REPAIRSHOPCAPATH/tls
-mkdir -p $SHOPCAPATH/tls
-cp $PEERS/insurance-org/ca/* $INSURANCECAPATH/ca
-cp $PEERS/insurance-org/tlsca/* $INSURANCECAPATH/tls
-mv $INSURANCECAPATH/ca/*_sk $INSURANCECAPATH/ca/key.pem
-mv $INSURANCECAPATH/ca/*-cert.pem $INSURANCECAPATH/ca/cert.pem
-mv $INSURANCECAPATH/tls/*_sk $INSURANCECAPATH/tls/key.pem
-mv $INSURANCECAPATH/tls/*-cert.pem $INSURANCECAPATH/tls/cert.pem
+# rm -rf {$SUPPLIER1CAPATH,$$SUPPLIER3CAPATH,$SUPPLIER2CAPATH}/{ca,tls}
+rm -rf $SUPPLIER1CAPATH/ca
+rm -rf $SUPPLIER3CAPATH/ca
+rm -rf $SUPPLIER2CAPATH/ca
+rm -rf $SUPPLIER1CAPATH/tls
+rm -rf $SUPPLIER3CAPATH/tls
+rm -rf $SUPPLIER2CAPATH/tls
+# mkdir -p {$SUPPLIER1CAPATH,$SUPPLIER3CAPATH,$SUPPLIER2CAPATH}/{ca,tls}
+mkdir -p $SUPPLIER1CAPATH/ca
+mkdir -p $SUPPLIER3CAPATH/ca
+mkdir -p $SUPPLIER2CAPATH/ca
+mkdir -p $SUPPLIER1CAPATH/tls
+mkdir -p $SUPPLIER3CAPATH/tls
+mkdir -p $SUPPLIER2CAPATH/tls
+cp $PEERS/supplier1-org/ca/* $SUPPLIER1CAPATH/ca
+cp $PEERS/supplier1-org/tlsca/* $SUPPLIER1CAPATH/tls
+mv $SUPPLIER1CAPATH/ca/*_sk $SUPPLIER1CAPATH/ca/key.pem
+mv $SUPPLIER1CAPATH/ca/*-cert.pem $SUPPLIER1CAPATH/ca/cert.pem
+mv $SUPPLIER1CAPATH/tls/*_sk $SUPPLIER1CAPATH/tls/key.pem
+mv $SUPPLIER1CAPATH/tls/*-cert.pem $SUPPLIER1CAPATH/tls/cert.pem
 
-cp $PEERS/police-org/ca/* $POLICECAPATH/ca
-cp $PEERS/police-org/tlsca/* $POLICECAPATH/tls
-mv $POLICECAPATH/ca/*_sk $POLICECAPATH/ca/key.pem
-mv $POLICECAPATH/ca/*-cert.pem $POLICECAPATH/ca/cert.pem
-mv $POLICECAPATH/tls/*_sk $POLICECAPATH/tls/key.pem
-mv $POLICECAPATH/tls/*-cert.pem $POLICECAPATH/tls/cert.pem
+cp $PEERS/supplier3-org/ca/* $SUPPLIER3CAPATH/ca
+cp $PEERS/supplier3-org/tlsca/* $SUPPLIER3CAPATH/tls
+mv $SUPPLIER3CAPATH/ca/*_sk $SUPPLIER3CAPATH/ca/key.pem
+mv $SUPPLIER3CAPATH/ca/*-cert.pem $SUPPLIER3CAPATH/ca/cert.pem
+mv $SUPPLIER3CAPATH/tls/*_sk $SUPPLIER3CAPATH/tls/key.pem
+mv $SUPPLIER3CAPATH/tls/*-cert.pem $SUPPLIER3CAPATH/tls/cert.pem
 
-cp $PEERS/repairshop-org/ca/* $REPAIRSHOPCAPATH/ca
-cp $PEERS/repairshop-org/tlsca/* $REPAIRSHOPCAPATH/tls
-mv $REPAIRSHOPCAPATH/ca/*_sk $REPAIRSHOPCAPATH/ca/key.pem
-mv $REPAIRSHOPCAPATH/ca/*-cert.pem $REPAIRSHOPCAPATH/ca/cert.pem
-mv $REPAIRSHOPCAPATH/tls/*_sk $REPAIRSHOPCAPATH/tls/key.pem
-mv $REPAIRSHOPCAPATH/tls/*-cert.pem $REPAIRSHOPCAPATH/tls/cert.pem
-
-cp $PEERS/shop-org/ca/* $SHOPCAPATH/ca
-cp $PEERS/shop-org/tlsca/* $SHOPCAPATH/tls
-mv $SHOPCAPATH/ca/*_sk $SHOPCAPATH/ca/key.pem
-mv $SHOPCAPATH/ca/*-cert.pem $SHOPCAPATH/ca/cert.pem
-mv $SHOPCAPATH/tls/*_sk $SHOPCAPATH/tls/key.pem
-mv $SHOPCAPATH/tls/*-cert.pem $SHOPCAPATH/tls/cert.pem
+cp $PEERS/supplier2-org/ca/* $SUPPLIER2CAPATH/ca
+cp $PEERS/supplier2-org/tlsca/* $SUPPLIER2CAPATH/tls
+mv $SUPPLIER2CAPATH/ca/*_sk $SUPPLIER2CAPATH/ca/key.pem
+mv $SUPPLIER2CAPATH/ca/*-cert.pem $SUPPLIER2CAPATH/ca/cert.pem
+mv $SUPPLIER2CAPATH/tls/*_sk $SUPPLIER2CAPATH/tls/key.pem
+mv $SUPPLIER2CAPATH/tls/*-cert.pem $SUPPLIER2CAPATH/tls/cert.pem
