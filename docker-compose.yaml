@@ -47,56 +47,56 @@ services:
     ports:
     - 7050:7050
 
-  supplier1:
+  supplier1-peer:
     container_name: supplier1
     extends:
       file: ./peer-base.yaml
       service: peer-base
-    image: supplier1
+    image: supplier1-peer
     environment:
-    - CORE_PEER_ID=supplier1
-    - CORE_PEER_ADDRESS=supplier1:7051
-    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=supplier1:7051
-    - CORE_PEER_LOCALMSPID=InsuranceOrgMSP
+    - CORE_PEER_ID=supplier1-peer
+    - CORE_PEER_ADDRESS=supplier1-peer:7051
+    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=supplier1-peer:7051
+    - CORE_PEER_LOCALMSPID=Supplier1OrgMSP
     ports:
     - 7051:7051
     - 7053:7053
     depends_on:
     - orderer0
 
-  supplier2:
+  supplier2-peer:
     container_name: supplier2
     extends:
       file: ./peer-base.yaml
       service: peer-base
-    image: supplier2
+    image: supplier2-peer
     environment:
-    - CORE_PEER_ID=supplier2
-    - CORE_PEER_ADDRESS=supplier2:7051
-    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=supplier2:7051
-    - CORE_PEER_LOCALMSPID=ShopOrgMSP
+    - CORE_PEER_ID=supplier2-peer
+    - CORE_PEER_ADDRESS=supplier2-peer:7051
+    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=supplier2-peer:7051
+    - CORE_PEER_LOCALMSPID=Supplier2OrgMSP
     ports:
     - 8051:7051
     - 8053:7053
     depends_on:
     - orderer0
-    - supplier1
+    - supplier1-peer
 
-  supplier3:
+  supplier3-peer:
     container_name: supplier3
     extends:
       file: ./peer-base.yaml
       service: peer-base
-    image: supplier3
+    image: supplier3-peer
     environment:
-    - CORE_PEER_ID=supplier3
-    - CORE_PEER_ADDRESS=supplier3:7051
-    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=supplier3:7051
-    - CORE_PEER_LOCALMSPID=RepairShopOrgMSP
+    - CORE_PEER_ID=supplier3-peer
+    - CORE_PEER_ADDRESS=supplier3-peer:7051
+    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=supplier3-peer:7051
+    - CORE_PEER_LOCALMSPID=Supplier3OrgMSP
     ports:
     - 9051:7051
     - 9053:7053
     depends_on:
     - orderer0
-    - supplier1
-    - supplier2
+    - supplier1-peer
+    - supplier2-peer

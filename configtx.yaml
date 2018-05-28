@@ -28,14 +28,14 @@ Organizations:
 - &Supplier1Org
   Name: Supplier1OrgMSP
   ID: Supplier1OrgMSP
-  MSPDir: cli/peers/peerOrganizations/supplier1/msp
+  MSPDir: cli/peers/peerOrganizations/supplier1-org/msp
   AnchorPeers:
   - Host: supplier1-peer
     Port: 7051
 - &Supplier2Org
   Name: Supplier2OrgMSP
   ID: Supplier2OrgMSP
-  MSPDir: cli/peers/peerOrganizations/supplier2/msp
+  MSPDir: cli/peers/peerOrganizations/supplier2-org/msp
   AnchorPeers:
   - Host: supplier2-peer
     Port: 7051

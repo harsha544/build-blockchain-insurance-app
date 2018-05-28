@@ -2,7 +2,8 @@
 /bin
 /src
 /pkg
-
+./configtxgen
+./cryptogen
 /**/ca
 /**/tls
 /**/crypto
