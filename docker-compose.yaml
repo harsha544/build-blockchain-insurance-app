@@ -47,6 +47,15 @@ services:
     ports:
     - 7050:7050
 
+  supplier1-couchdb1:
+    container_name: couchdb1
+    image: hyperledger/fabric-couchdb
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - "5984:5984"
+
   supplier1-peer:
     container_name: supplier1
     extends:
@@ -58,11 +67,22 @@ services:
     - CORE_PEER_ADDRESS=supplier1-peer:7051
     - CORE_PEER_GOSSIP_EXTERNALENDPOINT=supplier1-peer:7051
     - CORE_PEER_LOCALMSPID=Supplier1OrgMSP
+    - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1:5984
     ports:
     - 7051:7051
     - 7053:7053
     depends_on:
     - orderer0
+    - supplier1-couchdb1
+
+  supplier2-couchdb2:
+    container_name: couchdb2
+    image: hyperledger/fabric-couchdb
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - "6984:5984"
 
   supplier2-peer:
     container_name: supplier2
@@ -75,12 +95,23 @@ services:
     - CORE_PEER_ADDRESS=supplier2-peer:7051
     - CORE_PEER_GOSSIP_EXTERNALENDPOINT=supplier2-peer:7051
     - CORE_PEER_LOCALMSPID=Supplier2OrgMSP
+    - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb2:5984
     ports:
     - 8051:7051
     - 8053:7053
     depends_on:
     - orderer0
     - supplier1-peer
+    - supplier2-couchdb2
+
+  supplier3-couchdb3:
+    container_name: couchdb3
+    image: hyperledger/fabric-couchdb
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - "7984:5984"
 
   supplier3-peer:
     container_name: supplier3
@@ -93,6 +124,7 @@ services:
     - CORE_PEER_ADDRESS=supplier3-peer:7051
     - CORE_PEER_GOSSIP_EXTERNALENDPOINT=supplier3-peer:7051
     - CORE_PEER_LOCALMSPID=Supplier3OrgMSP
+    - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb3:5984
     ports:
     - 9051:7051
     - 9053:7053
@@ -100,3 +132,4 @@ services:
     - orderer0
     - supplier1-peer
     - supplier2-peer
+    - supplier3-couchdb3

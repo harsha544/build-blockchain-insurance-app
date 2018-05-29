@@ -19,6 +19,13 @@ dockerCaPull() {
       docker tag hyperledger/fabric-ca:$CA_TAG hyperledger/fabric-ca
 }
 
+dockerCouchDBPull() {
+      echo "==> FABRIC COUCHDB IMAGE"
+      echo
+      docker pull hyperledger/fabric-couchdb:ppc64le-0.4.8
+      docker tag hyperledger/fabric-couchdb:ppc64le-0.4.8 hyperledger/fabric-couchdb
+}
+
 BUILD=
 DOWNLOAD=
 if [ $# -eq 0 ]; then
@@ -46,6 +53,9 @@ if [ $DOWNLOAD ]; then
 
     echo "===> Pulling fabric ca Image"
     dockerCaPull ${CA_TAG}
+    
+    echo "===> Pulling fabric couchdb Image"
+    dockerCouchDBPull
     echo
     echo "===> List out hyperledger docker images"
     docker images | grep hyperledger*
