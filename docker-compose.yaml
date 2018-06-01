@@ -38,10 +38,6 @@ services:
     - ORDERER_GENERAL_GENESISFILE=/orderer/crypto/genesis.block
     - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
     - ORDERER_GENERAL_LOCALMSPDIR=/orderer/crypto/msp
-    - ORDERER_GENERAL_TLS_ENABLED=true
-    - ORDERER_GENERAL_TLS_PRIVATEKEY=/orderer/crypto/tls/server.key
-    - ORDERER_GENERAL_TLS_CERTIFICATE=/orderer/crypto/tls/server.crt
-    - ORDERER_GENERAL_TLS_ROOTCAS=[/orderer/crypto/tls/ca.crt]
     working_dir: /orderer
     command: orderer
     ports:
@@ -133,3 +129,25 @@ services:
     - supplier1-peer
     - supplier2-peer
     - supplier3-couchdb3
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools:ppc64le-1.1.0
+    tty: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_LOGGING_LEVEL=info
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=supplier1-peer:7051
+      - CORE_PEER_LOCALMSPID=Supplier1OrgMSP
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/cli/peers/peerOrganizations/supplier1-org/users/Admin@supplier1-org/msp
+      - CORE_CHAINCODE_KEEPALIVE=10
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/
+    command: /bin/bash
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./../chaincode/:/opt/gopath/src/github.com/
+        - .:/opt/gopath/src/github.com/hyperledger/fabric/
+    depends_on:
+      - supplier3-peer
+

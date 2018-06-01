@@ -9,15 +9,11 @@ services:
     - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
     - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
     - CORE_LOGGING_LEVEL=DEBUG
-    - CORE_PEER_TLS_ENABLED=true
     - CORE_PEER_ENDORSER_ENABLED=true
     - CORE_PEER_GOSSIP_USELEADERELECTION=true
     - CORE_PEER_GOSSIP_ORGLEADER=false
     - CORE_PEER_PROFILE_ENABLED=true
     - CORE_PEER_MSPCONFIGPATH=/peer/crypto/msp
-    - CORE_PEER_TLS_CERT_FILE=/peer/crypto/tls/server.crt
-    - CORE_PEER_TLS_KEY_FILE=/peer/crypto/tls/server.key
-    - CORE_PEER_TLS_ROOTCERT_FILE=/peer/crypto/tls/ca.crt
     working_dir: /peer
     command: peer node start
     volumes:

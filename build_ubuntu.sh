@@ -5,3 +5,5 @@ sh ./ibm_fabric.sh
 sh ./docker-images.sh
 sleep 5
 docker-compose up -d
+sleep 2
+docker exec cli scripts/run.sh
