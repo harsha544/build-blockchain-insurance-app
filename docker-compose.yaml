@@ -7,6 +7,8 @@ services:
       file: ./ca-base.yaml
       service: ca-base
     image: supplier1-ca
+    environment:
+    - FABRIC_CA_SERVER_CA_NAME=supplier1-ca
     ports:
     - 7054:7054
 
@@ -16,6 +18,8 @@ services:
       file: ./ca-base.yaml
       service: ca-base
     image: supplier2-ca
+    environment:
+    - FABRIC_CA_SERVER_CA_NAME=supplier2-ca
     ports:
     - 8054:7054
 
@@ -25,6 +29,8 @@ services:
       file: ./ca-base.yaml
       service: ca-base
     image: supplier3-ca
+    environment:
+    - FABRIC_CA_SERVER_CA_NAME=supplier3-ca
     ports:
     - 9054:7054
 
@@ -38,6 +44,11 @@ services:
     - ORDERER_GENERAL_GENESISFILE=/orderer/crypto/genesis.block
     - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
     - ORDERER_GENERAL_LOCALMSPDIR=/orderer/crypto/msp
+    - ORDERER_GENERAL_TLS_ENABLED=true
+    - ORDERER_GENERAL_TLS_PRIVATEKEY=/orderer/crypto/tls/server.key
+    - ORDERER_GENERAL_TLS_CERTIFICATE=/orderer/crypto/tls/server.crt
+    - ORDERER_GENERAL_TLS_ROOTCAS=[/orderer/crypto/tls/ca.crt]
+
     working_dir: /orderer
     command: orderer
     ports:
@@ -53,7 +64,7 @@ services:
       - "5984:5984"
 
   supplier1-peer:
-    container_name: supplier1
+    container_name: supplier1-peer
     extends:
       file: ./peer-base.yaml
       service: peer-base
@@ -66,6 +77,7 @@ services:
     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1:5984
     ports:
     - 7051:7051
+    - 7052:7052
     - 7053:7053
     depends_on:
     - orderer0
@@ -81,7 +93,7 @@ services:
       - "6984:5984"
 
   supplier2-peer:
-    container_name: supplier2
+    container_name: supplier2-peer
     extends:
       file: ./peer-base.yaml
       service: peer-base
@@ -94,6 +106,7 @@ services:
     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb2:5984
     ports:
     - 8051:7051
+    - 8052:7052
     - 8053:7053
     depends_on:
     - orderer0
@@ -110,7 +123,7 @@ services:
       - "7984:5984"
 
   supplier3-peer:
-    container_name: supplier3
+    container_name: supplier3-peer
     extends:
       file: ./peer-base.yaml
       service: peer-base
@@ -123,6 +136,7 @@ services:
     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb3:5984
     ports:
     - 9051:7051
+    - 9052:7052
     - 9053:7053
     depends_on:
     - orderer0
@@ -142,6 +156,11 @@ services:
       - CORE_PEER_LOCALMSPID=Supplier1OrgMSP
       - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/cli/peers/peerOrganizations/supplier1-org/users/Admin@supplier1-org/msp
       - CORE_CHAINCODE_KEEPALIVE=10
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/cli/peers/peerOrganizations/supplier1-org/peers/supplier1-peer/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/cli/peers/peerOrganizations/supplier1-org/peers/supplier1-peer/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/cli/peers/peerOrganizations/supplier1-org/peers/supplier1-peer/tls/ca.crt
+
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/
     command: /bin/bash
     volumes:

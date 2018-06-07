@@ -1,0 +1,158 @@
+version: '2'
+
+services:
+  supplier1-ca:
+    container_name: supplier1-ca
+    extends:
+      file: ./ca-base.yaml
+      service: ca-base
+    image: supplier1-ca
+    ports:
+    - 7054:7054
+
+  supplier2-ca:
+    container_name: supplier2-ca
+    extends:
+      file: ./ca-base.yaml
+      service: ca-base
+    image: supplier2-ca
+    ports:
+    - 8054:7054
+
+  supplier3-ca:
+    container_name: supplier3-ca
+    extends:
+      file: ./ca-base.yaml
+      service: ca-base
+    image: supplier3-ca
+    ports:
+    - 9054:7054
+
+  orderer0:
+    container_name: orderer0
+    image: orderer
+    environment:
+    - ORDERER_GENERAL_LOGLEVEL=debug
+    - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+    - ORDERER_GENERAL_GENESISMETHOD=file
+    - ORDERER_GENERAL_GENESISFILE=/orderer/crypto/genesis.block
+    - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+    - ORDERER_GENERAL_LOCALMSPDIR=/orderer/crypto/msp
+    - ORDERER_GENERAL_TLS_ENABLED=true
+    - ORDERER_GENERAL_TLS_PRIVATEKEY=/orderer/crypto/tls/server.key
+    - ORDERER_GENERAL_TLS_CERTIFICATE=/orderer/crypto/tls/server.crt
+    - ORDERER_GENERAL_TLS_ROOTCAS=[/orderer/crypto/tls/ca.crt]
+
+    working_dir: /orderer
+    command: orderer
+    ports:
+    - 7050:7050
+
+  supplier1-couchdb1:
+    container_name: couchdb1
+    image: hyperledger/fabric-couchdb
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - "5984:5984"
+
+  supplier1-peer:
+    container_name: supplier1
+    extends:
+      file: ./peer-base.yaml
+      service: peer-base
+    image: supplier1-peer
+    environment:
+    - CORE_PEER_ID=supplier1-peer
+    - CORE_PEER_ADDRESS=supplier1-peer:7051
+    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=supplier1-peer:7051
+    - CORE_PEER_LOCALMSPID=Supplier1OrgMSP
+    - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1:5984
+    ports:
+    - 7051:7051
+    - 7053:7053
+    depends_on:
+    - orderer0
+    - supplier1-couchdb1
+
+  supplier2-couchdb2:
+    container_name: couchdb2
+    image: hyperledger/fabric-couchdb
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - "6984:5984"
+
+  supplier2-peer:
+    container_name: supplier2
+    extends:
+      file: ./peer-base.yaml
+      service: peer-base
+    image: supplier2-peer
+    environment:
+    - CORE_PEER_ID=supplier2-peer
+    - CORE_PEER_ADDRESS=supplier2-peer:7051
+    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=supplier2-peer:7051
+    - CORE_PEER_LOCALMSPID=Supplier2OrgMSP
+    - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb2:5984
+    ports:
+    - 8051:7051
+    - 8053:7053
+    depends_on:
+    - orderer0
+    - supplier1-peer
+    - supplier2-couchdb2
+
+  supplier3-couchdb3:
+    container_name: couchdb3
+    image: hyperledger/fabric-couchdb
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - "7984:5984"
+
+  supplier3-peer:
+    container_name: supplier3
+    extends:
+      file: ./peer-base.yaml
+      service: peer-base
+    image: supplier3-peer
+    environment:
+    - CORE_PEER_ID=supplier3-peer
+    - CORE_PEER_ADDRESS=supplier3-peer:7051
+    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=supplier3-peer:7051
+    - CORE_PEER_LOCALMSPID=Supplier3OrgMSP
+    - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb3:5984
+    ports:
+    - 9051:7051
+    - 9053:7053
+    depends_on:
+    - orderer0
+    - supplier1-peer
+    - supplier2-peer
+    - supplier3-couchdb3
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools:ppc64le-1.1.0
+    tty: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_LOGGING_LEVEL=info
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=supplier1-peer:7051
+      - CORE_PEER_LOCALMSPID=Supplier1OrgMSP
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/cli/peers/peerOrganizations/supplier1-org/users/Admin@supplier1-org/msp
+      - CORE_CHAINCODE_KEEPALIVE=10
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/
+    command: /bin/bash
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./../chaincode/:/opt/gopath/src/github.com/
+        - .:/opt/gopath/src/github.com/hyperledger/fabric/
+    depends_on:
+      - supplier3-peer
+
