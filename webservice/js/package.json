@@ -1,0 +1,12 @@
+{
+  "name": "webservice",
+  "version": "1.0.0",
+  "description": "Webservice Used to interact with Blockchain",
+  "main": "web_service.js",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "express": "^4.16.3",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2"
+  }
+}
