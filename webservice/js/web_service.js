@@ -120,9 +120,6 @@ app.post('/itemBySupplier', async function (req, res) {
 
 
 
-
-
-
 app.post('/closePO', async function (req, res) {
    // Extract the recieved contents
        //data =  req.body;
@@ -155,9 +152,6 @@ app.post('/closePO', async function (req, res) {
 
 
 
-
-
-
 app.get('/PODetails', async function (req, res) {
    // Extract the recieved contents
        //data =  req.body;
@@ -178,13 +172,6 @@ app.get('/PODetails', async function (req, res) {
        console.log(returndata)
        res.end(returndata);
 })
-
-
-
-
-
-
-
 
 
 
