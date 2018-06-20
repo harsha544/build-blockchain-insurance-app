@@ -55,9 +55,7 @@ with supplier$i values from above respectively.
 #### Step 9: Update Orderer PEM Values in $PWD/composer/supplier-retailer.json
 
 awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' cli/peers/ordererOrganizations/orderer-org/orderers/orderer0/tls/ca.crt > composer/orderer-ca.crt
-
 cat composer/orderer-ca.crt
-
 Open *composer/supplier-retailer.json* and update **INSERT_ORDERER_CA_CERT** with above value
 
 
@@ -121,11 +119,10 @@ composer card create -p supplier3Peer/supplier-retailer-org3.json -u PeerAdmin -
 #### Step 13: Importing the business network cards for the Hyperledger Fabric administrator for all Orgs
 
 composer card import -f supplier1Peer/PeerAdmin@supplier1.card --card PeerAdmin@supplier-retailer-org1
-
 composer card import -f supplier2Peer/PeerAdmin@supplier2.card --card PeerAdmin@supplier-retailer-org2
 composer card import -f supplier3Peer/PeerAdmin@supplier3.card --card PeerAdmin@supplier-retailer-org3
 
-Issue composer card list to verify whether cards have been imported successfully or not
+Issue *composer card list* to verify whether cards have been imported successfully or not
 
 
 #### Step 14: Installing the business network onto the Hyperledger Fabric peer nodes for
