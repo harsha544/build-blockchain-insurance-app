@@ -1,4 +1,4 @@
-###### Step1: Clone the repository
+##### Step1: Clone the repository
 git clone https://github.com/harsha544/supplier-retailer-app
 
 ###### Step 2: Change Directory
