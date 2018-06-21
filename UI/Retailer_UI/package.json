@@ -1,0 +1,32 @@
+{
+  "name": "retailer_ui",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dbconfig.js",
+  "dependencies": {
+    "angular-smart-table": "^2.1.11",
+    "angular-ui-grid": "^4.4.11",
+    "async": "^2.6.1",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.0",
+    "oracledb": "^2.2.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harsha544/supplier-retailer-app.git"
+  },
+  "author": "Thasmiya Noorain A N <an.tasmiya@gmail.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/harsha544/supplier-retailer-app/issues"
+  },
+  "homepage": "https://github.com/harsha544/supplier-retailer-app#readme"
+}

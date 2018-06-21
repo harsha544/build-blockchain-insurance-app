@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Landing Page - Start Bootstrap Theme</title>
+
+    
+
+
+   
+   
+
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+ <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-smart-table/2.1.8/smart-table.min.js"></script>
+ <script src = "underscore.js"></script>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.min.js"></script>
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans" />
+ <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.min.js"></script>
+<style>
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: right;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #87CEFA;
+}
+</style>
+ 
+
+  </head>
+
+  <body  >
+
+<ul>
+  <li><a class="active" href="/">Home</a></li>
+  <li><a href="/create">Raise PO</a></li>
+  <li><a href="/search">Search PO</a></li>
+  
+</ul>
+
+  
+
+    
+    <script src="vendorsearch/jquery/jquery.min.js"></script>
+    <script src="vendorsearch/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <div class="container">
+  <h1 class="text-center" style="margin:30px auto;"> Search PO </h1>
+ 
+<script>
+
+//Demo of Searching Sorting and Pagination of Table with AngularJS - Advance Example
+
+var myApp = angular.module('myApp', ['ui.bootstrap','ngStorage']);
+
+//Not Necessary to Create Service, Same can be done in COntroller also as method like add() method
+myApp.service('filteredListService', function () {
+
+    this.searched = function (valLists, toSearch) {
+        return _.filter(valLists,
+
+        function (i) {
+            /* Search Text in all 3 fields */
+            return searchUtil(i, toSearch);
+        });
+    };
+
+    this.paged = function (valLists, pageSize) {
+        retVal = [];
+        for (var i = 0; i < valLists.length; i++) {
+            if (i % pageSize === 0) {
+                retVal[Math.floor(i / pageSize)] = [valLists[i]];
+            } else {
+                retVal[Math.floor(i / pageSize)].push(valLists[i]);
+            }
+        }
+        return retVal;
+    };
+
+});
+
+//Inject Custom Service Created by us and Global service $filter. This is one way of specifying dependency Injection
+var TableCtrl = myApp.controller('TableCtrl', function ($scope,$window,$http, $modal,$localStorage, $filter, filteredListService) {
+var result = [];
+/*$http.get('/getpomaster')
+    .then(function(response) {
+         $scope.result = response.data;
+	//$window.alert(result);
+	
+    });*/
+
+    $scope.pageSize = 4;
+
+    /*$.ajax({
+	type: 'POST',
+	data: "",
+	//contentType: 'application/json',
+        url: 'http://localhost:8080/getpomaster',						
+        success: function(data) {
+               console.log('success');
+               $scope.allItems = = data;
+		console.log(data);
+            }
+	});*/
+$scope.allItems = getDummyData();
+	
+//$window.alert(typeof $scope.allItems);
+    $scope.reverse = false;
+
+    $scope.resetAll = function () {
+        $scope.filteredList = $scope.allItems;
+        $scope.newponumber = '';
+        $scope.newsts = '';
+        $scope.newtax = '';
+	$scope.newpovalue = '';
+        $scope.searchText = '';
+        $scope.currentPage = 0;
+        $scope.Header = ['', '', ''];
+    }
+
+    $scope.add = function () {
+        $scope.allItems.push({
+            ponumber: $scope.newponumber,
+            sts: $scope.newsts,
+	    povalue : $scope.newpovalue,
+            totaltax : $scope.newtax
+        });
+        $scope.resetAll();
+    }
+
+    $scope.search = function () {
+        $scope.filteredList = filteredListService.searched($scope.allItems, $scope.searchText);
+
+        if ($scope.searchText == '') {
+            $scope.filteredList = $scope.allItems;
+        }
+        $scope.pagination();
+    }
+
+    // Calculate Total Number of Pages based on Search Result
+    $scope.pagination = function () {
+        $scope.ItemsByPage = filteredListService.paged($scope.filteredList, $scope.pageSize);
+    };
+
+    $scope.setPage = function () {
+        $scope.currentPage = this.n;
+    };
+
+    $scope.firstPage = function () {
+        $scope.currentPage = 0;
+    };
+
+    $scope.lastPage = function () {
+        $scope.currentPage = $scope.ItemsByPage.length - 1;
+    };
+
+    $scope.range = function (input, total) {
+        var ret = [];
+        if (!total) {
+            total = input;
+            input = 0;
+        }
+        for (var i = input; i < total; i++) {
+            if (i != 0 && i != total - 1) {
+                ret.push(i);
+            }
+        }
+        return ret;
+    };
+
+    $scope.sort = function (sortBy) {
+        $scope.resetAll();
+
+        $scope.columnToOrder = sortBy;
+
+        //$Filter - Standard Service
+        $scope.filteredList = $filter('orderBy')($scope.filteredList, $scope.columnToOrder, $scope.reverse);
+
+        if ($scope.reverse) iconName = 'glyphicon glyphicon-chevron-up';
+        else iconName = 'glyphicon glyphicon-chevron-down';
+
+        if (sortBy === 'ponumber') {
+            $scope.Header[0] = iconName;
+        } else if (sortBy === 'sts') {
+            $scope.Header[1] = iconName;
+        } else {
+            $scope.Header[2] = iconName;
+        }
+
+        $scope.reverse = !$scope.reverse;
+
+        $scope.pagination();
+    };
+
+    //By Default sort ny Name
+    $scope.sort('ponumber');
+
+
+
+  $scope.showpo = function(item)
+  {
+       
+
+
+
+  	$localStorage.message = item.ponumber;
+	//$window.alert($localStorage.message + "sd");
+	console.log('opening pop up');
+	var modalInstance = $modal.open({
+	templateUrl: '/getpopup',
+	controller: 'PopupCont'
+});
+
+
+	
+  };
+
+});
+
+
+angular.module('myApp').controller('PopupCont', ['$scope','$modalInstance','$localStorage',function ($scope, $modalInstance,$localStorage) {
+
+$scope.data = $localStorage.message;
+
+
+$.ajax({
+			type: 'POST',
+			data: {"ponumber":$scope.data},
+			//contentType: 'application/x-www-form-urlencoded',
+                        url: 'http://localhost:8080/getpodetail',						
+                        success: function(data) {
+                            console.log('success');
+                            obj = data;
+			    console.log(obj);
+			    $scope.podetails = data;
+			    
+		            
+                        }
+                    });	
+
+$scope.close = function () {
+$modalInstance.dismiss('cancel');
+
+};
+}]);
+
+function searchUtil(item, toSearch) {
+    /* Search Text in all 3 fields */
+    return (item.sts.toLowerCase().indexOf(toSearch.toLowerCase()) > -1 ||  item.ponumber == toSearch) ? true : false;
+}
+
+/*Get Dummy Data for Example*/
+function getDummyData() {
+  
+ 	var obj = [];
+						
+					
+					$.ajax({
+						type: 'POST',
+						data: "",
+				        //contentType: 'application/json',
+                        url: 'http://localhost:8080/getpomaster',						
+                        success: function(data) {
+                            console.log('success');
+                            obj = data;
+			    console.log(data);
+                        }
+                    });	
+	alert(obj);
+
+	return obj;
+
+}
+
+
+function podetails(item)
+{
+
+//window.alert(item.ponumber);
+var ponumber = item.ponumber;
+var obj = null;
+						
+					
+					$.ajax({
+						type: 'POST',
+						data: {"ponumber":ponumber},
+				        contentType: 'application/x-www-form-urlencoded',
+                        url: 'http://localhost:8080/getpodetail',						
+                        success: function(data) {
+                            console.log('success');
+                            obj = data;
+			    console.log(obj);
+			    return data;
+		            
+                        }
+                    });	
+	
+
+	return obj;
+
+}
+
+
+
+</script>
+
+
+<br />
+<br />
+<div ng-app="myApp">
+    <div ng-controller="TableCtrl">
+        <div class="input-group">
+            <input class="form-control" ng-model="searchText" placeholder="Search" type="search" ng-change="search()" /> <span class="input-group-addon">
+      <span class="glyphicon glyphicon-search"></span>
+</span>
+        </div>
+        <table class="table  table-hover data-table myTable">
+            <thead>
+                <tr>
+                    <th class="EmpId"> <a href="#" ng-click="sort('ponumber',$event)"> PO Number
+                         <span class="{{Header[0]}}"></span>
+                         </a>
+
+                    </th>
+                    <th class="name"> <a ng-click="sort('name')" href="#"> Status
+                         <span class="{{Header[1]}}"></span></a>
+                    </th>
+		    <th class="name">  Total Tax
+                         
+                    </th>
+		    <th class="name">  PO Value
+                         
+                    </th>
+		    
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in ItemsByPage[currentPage] | orderBy:columnToOrder:reverse">
+                    <td>{{item.ponumber}}</td>
+                    <td>{{item.sts}}</td>
+		    <td>{{item.totaltax}}</td>
+                    <td>{{item.povalue}}</td>
+		    <td> <button class ="btn btn-sm btn-info" ng-click = "showpo(item)"> View PO </button>
+                    
+                </tr>
+            </tbody>
+        </table>
+        <ul class="pagination pagination-sm">
+            <li ng-class="{active:0}"><a href="#" ng-click="firstPage()">First</a>
+
+            </li>
+            <li ng-repeat="n in range(ItemsByPage.length)"> <a href="#" ng-click="setPage()" ng-bind="n+1">1</a>
+
+            </li>
+            <li><a href="#" ng-click="lastPage()">Last</a>
+
+            </li>
+        </ul>
+        
+    </div>
+    <!-- Ends Controller -->
+</div>
+
+  </body>
+
+</html>
+

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Shop Item - Start Bootstrap Template</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!--Custom styles for this template >-->
+    <link href="css/shop-item.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+   <!-- <script src="app.js"></script>-->
+
+  <style>
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: right;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #87CEFA;
+}
+
+
+
+.popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* The actual popup */
+.popup .popuptext {
+    visibility: hidden;
+    width: 160px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -80px;
+   border-color: #555 transparent transparent transparent;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #FF0000 transparent transparent transparent;
+}
+
+/* Toggle this class - hide and show the popup */
+.popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+    from {opacity: 0;} 
+    to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
+}
+</style>
+
+  </head>
+
+  <body  ng-app="myApp" ng-controller='retailerController'>
+
+
+ <script>
+
+var myapp = angular.module('myApp',[]);
+  myapp.controller('retailerController', function($scope,$http,$window) {
+ //$scope.items = ["item1", "item2", "item3","item11"];
+ 
+ /*$http.get('/getpomaster')
+    .then(function(response) {
+        $scope.myWelcome = response.data;
+    });*/
+  
+  $http({
+      url: '/getitemlist',
+      method: "POST",
+      data: "send item list",
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+  }).then(function mySuccess(response) {
+        $scope.items = response.data;
+    }, function myError(response) {
+        $scope.myWelcome = response.statusText;
+    });
+
+ $scope.selectedItems =[];
+
+    $scope.itemDetails = [
+        
+        {
+            'item':"",
+            'quantity':"",
+	        's1':"",
+	        's2':"",
+	        's3':"",
+	        'cgst':"",
+	        'sgst':"",
+	        'poval':"",
+            
+        }];
+    
+    $scope.selectAction1 = function(itemDetail) {
+    	//JSON.stringify({type:"item", "itemnumber":itemDetail.item})
+       //window.alert(itemDetail.item);
+        
+       
+	var item= itemDetail.item;	
+
+
+        $http({
+            url: '/getsuppliers',
+            method: "POST",
+            data: item
+            
+        	
+        }).then(function mySuccess(response) {
+              $scope.suppliers= response.data;
+              //window.alert($scope.suppliers);
+              var suppliers= $scope.suppliers;
+              //var suppliersarr =  suppliers.split(",");
+              var suppstring = suppliers.toString();
+              itemDetail.s1=suppstring.split(',')[1];
+              itemDetail.s2=suppstring.split(',')[2];
+              itemDetail.s3=suppstring.split(',')[3];
+              
+              
+              
+              
+          });
+
+       $scope.selectedItems.push(itemDetail.item);
+
+
+
+    };
+    
+    
+    $scope.selectAction2 = function(itemDetail) {
+    	//JSON.stringify({type:"item", "itemnumber":itemDetail.item})
+       //window.alert(itemDetail.item);
+        var item = itemDetail.item;
+        $http({
+            url: '/getsuppliers',
+            method: "POST",
+            data: item
+            
+        	
+        }).then(function mySuccess(response) {
+              $scope.suppliers= response.data;
+              window.alert($scope.suppliers);
+              var suppliers= $scope.suppliers;
+              //var suppliersarr =  suppliers.split(",");
+              var suppstring = suppliers.toString();
+              
+              var price = parseInt(suppstring.split(',')[4])* itemDetail.quantity;
+              var sgst = parseInt(suppstring.split(',')[5]);
+              var cgst = parseInt(suppstring.split(',')[6]);
+              //alert(price);
+              
+              itemDetail.sgst = ((sgst * price) /100)  ; 
+              itemDetail.cgst = ((cgst * price) /100)  ; 
+              itemDetail.poval= itemDetail.sgst + itemDetail.cgst + price;
+ 
+          });
+    };
+    
+    
+    $scope.addNew = function(itemDetail){
+            $scope.itemDetails.push({ 
+                'item': "", 
+                'quantity': "",
+				's1':"",
+	        	's2':"",
+	        	's3':"",
+	        	'cgst':"",
+	        	'sgst':"",
+	        	'poval':"",
+	        	
+                
+            });
+
+
+             //window.alert( $scope.itemDetails);
+        };
+    
+      $scope.remove = function(){
+            var newDataList=[];
+            $scope.selectedAll = false;
+            angular.forEach($scope.itemDetails, function(selected){
+                if(!selected.selected){
+                    newDataList.push(selected);
+                }
+            }); 
+            $scope.itemDetails = newDataList;
+        };
+    
+    $scope.checkAll = function () {
+        if (!$scope.selectedAll) {
+            $scope.selectedAll = true;
+        } else {
+            $scope.selectedAll = false;
+        }
+        angular.forEach($scope.itemDetails, function(itemDetail) {
+            itemDetail.selected = $scope.selectedAll;
+        });
+
+    }; 
+    
+   $scope.checkvaliditem = function(itemDetail)
+  {
+       var err = 0;
+	for(var i=0;i<$scope.itemDetails.length - 1;i++)
+	{
+		if($scope.itemDetails[i].item== itemDetail.item){
+		displayerr();
+		err = -1;
+		break;}
+	}
+	if(err == 0)
+	{
+		$scope.selectAction1(itemDetail);
+	}
+  } 
+    
+    
+   $scope.calculate_poval = function(itemDetails)
+   {
+	   var poval = 0;
+	    //alert($scope.itemDetails.length);
+	    for(var i = 0; i < $scope.itemDetails.length; i++){
+	    	//alert($scope.itemDetails[i].poval);
+	    	poval = $scope.itemDetails[i].poval + poval;
+	    	
+	    	}
+	   // alert(poval);
+	    return poval;
+	   
+   }
+   
+   $scope.calculate_cgst = function(itemDetails)
+   {
+	   var cgst = 0;
+	    //alert($scope.itemDetails.length);
+	    for(var i = 0; i < $scope.itemDetails.length; i++){
+	    	//alert($scope.itemDetails[i].poval);
+	    	cgst = $scope.itemDetails[i].cgst + cgst;
+	    	
+	    	}
+	   // alert(poval);
+	    return cgst;
+	   
+   }
+   
+   $scope.calculate_sgst = function(itemDetails)
+   {
+	   var sgst = 0;
+	    //alert($scope.itemDetails.length);
+	    for(var i = 0; i < $scope.itemDetails.length; i++){
+	    	//alert($scope.itemDetails[i].poval);
+	    	sgst = $scope.itemDetails[i].sgst + sgst;
+	    	
+	    	}
+	   // alert(poval);
+	    return sgst;
+	   
+   }
+   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    $scope.submitForm = function(itemDetails)
+    {
+      //window.alert(itemDetails.length);
+      
+      
+        
+      $http({
+            url: '/submit/po',
+            method: "POST",
+            data: itemDetails,
+            headers: {'Content-Type': 'application/json'}
+            
+        }).then(function mySuccess(response) {
+        
+        $scope.reset(itemDetails);
+        $scope.status = "PO raised  successfully and po number is "  + response.data; 
+    }, function myError(response) {
+        $scope.myWelcome = response.statusText;
+    });
+      
+      };
+    
+    $scope.reset = function(itemDetails)
+    {
+  	 
+  	  
+  	  $scope.itemDetails = [
+        
+        {
+            'item':"",
+            'quantity':"",
+	        's1':"",
+	        's2':"",
+	        's3':"",
+	        'cgst':"",
+	        'sgst':"",
+	        'poval':"",
+            
+        }];
+  	  
+  	  
+  	  
+  	  
+  	  
+    }
+
+  });
+
+
+
+
+function displayerr()
+{
+var popup = document.getElementById("myPopup");
+    popup.classList.toggle("show");
+}
+
+
+
+
+</script> 
+
+
+
+<ul>
+  <li><a class="active" href="/">Home</a></li>
+  <li><a href="/create">Raise PO</a></li>
+  <li><a href="/search">Search PO</a></li>
+  
+</ul>
+
+
+
+    <h1 class="text-center" style="margin:30px auto;"> Create New Order </h1>
+
+
+
+<div style="width:1200px; margin:30px auto;" class="border border-primary">
+ <form id="myForm" name="poform" margin = "auto" width="300px" >
+
+
+ 
+ <table class ="table table-borderless" style="margin:30px auto;" >
+             <tr>
+                                       <th><!--<input type="checkbox" ng-model="selectedAll" ng-click="checkAll()" />--></th>
+                                        <th>Item</th>
+                                        <th>Quantity</th>
+                                        <th>Primary Supplier </th>
+					<th>Secondary Supplier </th>
+					<th>Alternate Supplier </th>
+                                        
+                                    </tr>
+   
+
+                     <tr ng-repeat="itemDetail in itemDetails"  >
+                                        <td>
+                                            <input type="checkbox" ng-model="itemDetail.selected" /></td>
+                                            <td>
+                                            <select  ng-model="itemDetail.item" ng-options="x for x in items" ng-change="checkvaliditem(itemDetail)" class="form-control" name="item"> Select Item </select> <div class= "popup" ><span class="popuptext" id="myPopup">Item already selcted</span></div></td>
+                                            <td>
+                                            <input type="number" class="form-control" ng-model="itemDetail.quantity"  ng-change="selectAction2(itemDetail)" name= "quantity" required min='1' step ='1'/></td>
+                                        
+                                        
+                                        <td>
+                                            <input type="text"  class="form-control" ng-model="itemDetail.s1" name= "supplier1name"  readonly/></td>
+                                        <td>
+                                            <input type="text" class="form-control" ng-model="itemDetail.s2" name= "supplier2name"  readonly/></td>
+                                        <td>
+                                            <input type="text" class="form-control" ng-model="itemDetail.s3" name= "supplier3name"  readonly/></td>
+                                        
+                                        
+                                    </tr>
+
+                    <tr>
+
+                      <td><input  type="button" class="btn btn-danger pull-right" ng-click="remove()" value="Remove">
+                      </td>
+                      <td><input type="button" class="btn btn-primary addnew pull-right" value="AddNew" ng-click="addNew(itemDetail)">
+                      </td>
+                    </tr>
+
+</table>
+
+
+<table style="width:400px; margin:0 auto;" >
+<tr>
+ <td>
+  <label>SGST </label>
+ </td>
+ <td>
+
+ 
+  <input type= "text" name ="sgst" ng-model="sgst" ng-value = "calculate_sgst(itemDetails)"  ng-init = "sgst = 0" readonly>
+</td>
+ </tr>
+ <tr>
+ <td>
+    <label> CGST </label>
+  
+ </td>
+<td>
+  <input type = "text" ng-model= "cgst"  ng-value = "calculate_cgst(itemDetails)"   readonly>
+</td>
+ </tr>
+<tr>
+ <td>
+  
+<label> PO VALUE</label>
+  
+ </td>
+<td>
+ 
+  <input type = "text" ng-model="poval" name ="po-val" ng-value = "calculate_poval(itemDetails)"  " ng-init = "poval = 0 "  readonly>
+</td>
+ </tr>
+</table>
+
+
+<div class="form-group" style="margin-left:10px;"  >
+
+  <input type="submit" value="Submit" class="btn btn-success pull-left"  ng-click="submitForm(itemDetails)" ng-disabled="poform.$invalid"/>
+  <input type="reset" ng-click="reset()" value="Reset" class="btn btn-warning pull-left" />
+</div>
+
+</form> 
+
+
+</div>
+
+<div class="panel panel-default">{{status}}</div>
+
+
+  </body>
+
+</html>
+
