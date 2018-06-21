@@ -1,0 +1,48 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">  </script>
+<title> Dummy</title>
+</head>
+
+
+<link href="css/shop-item.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+   <!-- <script src="app.js"></script>-->
+
+  </head>
+
+  <body  ng-app="myApp" ng-controller='retailerController'>
+
+
+ <script>
+
+var myapp = angular.module('myApp',[]);
+  myapp.controller('retailerController', function($scope,$http,$window) {
+
+
+$window.alert("In ");
+
+ $http({
+      url: '/getpomaster',
+      method: "GET",
+      data: "send po master",
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+  }).then(function mySuccess(response) {
+        $scope.items = response.data;
+    }, function myError(response) {
+        window.alert(response.statusText);
+        $scope.myWelcome = response.statusText;
+    });
+
+
+
+
+
+
+</script>
+</body>
+</html>

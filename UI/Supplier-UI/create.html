@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Shop Item - Start Bootstrap Template</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!--Custom styles for this template >-->
+    <link href="css/shop-item.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+   <!-- <script src="app.js"></script>-->
+
+  </head>
+
+  <body  ng-app="myApp" ng-controller='retailerController'>
+
+
+ <script>
+
+var myapp = angular.module('myApp',[]);
+  myapp.controller('retailerController', function($scope,$http,$window) {
+ $scope.items = ["supplier1", "supplier2", "supplier3"];
+ 
+ /*$http.get('/getpomaster')
+    .then(function(response) {
+        $scope.myWelcome = response.data;
+    });*/
+  
+  /*$http({
+      url: '/getitemlist',
+      method: "POST",
+      data: "send item list",
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+  }).then(function mySuccess(response) {
+        $scope.items = response.data;
+    }, function myError(response) {
+        $scope.myWelcome = response.statusText;
+    });
+   */
+
+
+
+    $scope.itemDetails = [
+        
+        {
+            'item':"",
+            'quantity':"",
+	        's1':"",
+	        's2':"",
+	        's3':"",
+	        'cgst':"",
+	        'sgst':"",
+	        'poval':"",
+            
+        }];
+    
+    $scope.selectAction1 = function(itemDetail) {
+    	//JSON.stringify({type:"item", "itemnumber":itemDetail.item})
+       //window.alert(itemDetail.item);
+        
+        $http({
+            url: '/getsuppliers',
+            method: "POST",
+            data: itemDetail.item
+            
+        	
+        }).then(function mySuccess(response) {
+              $scope.suppliers= response.data;
+              window.alert($scope.suppliers);
+              var suppliers= $scope.suppliers;
+              //var suppliersarr =  suppliers.split(",");
+              var suppstring = suppliers.toString();
+              itemDetail.s1=suppstring.split(',')[1];
+              itemDetail.s2=suppstring.split(',')[2];
+              itemDetail.s3=suppstring.split(',')[3];
+              
+              
+              
+              
+          });
+    };
+    
+    
+    $scope.selectAction2 = function(itemDetail) {
+    	//JSON.stringify({type:"item", "itemnumber":itemDetail.item})
+       //window.alert(itemDetail.item);
+        
+        $http({
+            url: '/getsuppliers',
+            method: "POST",
+            data: itemDetail.item
+            
+        	
+        }).then(function mySuccess(response) {
+              $scope.suppliers= response.data;
+              window.alert($scope.suppliers);
+              var suppliers= $scope.suppliers;
+              //var suppliersarr =  suppliers.split(",");
+              var suppstring = suppliers.toString();
+              
+              var price = parseInt(suppstring.split(',')[4])* itemDetail.quantity;
+              var sgst = parseInt(suppstring.split(',')[5]);
+              var cgst = parseInt(suppstring.split(',')[6]);
+              //alert(price);
+              
+              itemDetail.sgst = ((sgst * price) /100)  ; 
+              itemDetail.cgst = ((cgst * price) /100)  ; 
+              itemDetail.poval= itemDetail.sgst + itemDetail.cgst + price;
+ 
+          });
+    };
+    
+    
+    $scope.addNew = function(itemDetail){
+            $scope.itemDetails.push({ 
+                'item': "", 
+                'quantity': "",
+				's1':"",
+	        	's2':"",
+	        	's3':"",
+	        	'cgst':"",
+	        	'sgst':"",
+	        	'poval':"",
+	        	
+                
+            });
+
+
+             //window.alert( $scope.itemDetails);
+        };
+    
+      $scope.remove = function(){
+            var newDataList=[];
+            $scope.selectedAll = false;
+            angular.forEach($scope.itemDetails, function(selected){
+                if(!selected.selected){
+                    newDataList.push(selected);
+                }
+            }); 
+            $scope.itemDetails = newDataList;
+        };
+    
+    $scope.checkAll = function () {
+        if (!$scope.selectedAll) {
+            $scope.selectedAll = true;
+        } else {
+            $scope.selectedAll = false;
+        }
+        angular.forEach($scope.itemDetails, function(itemDetail) {
+            itemDetail.selected = $scope.selectedAll;
+        });
+
+    }; 
+    
+    
+    
+    
+   $scope.calculate_poval = function(itemDetails)
+   {
+	   var poval = 0;
+	    //alert($scope.itemDetails.length);
+	    for(var i = 0; i < $scope.itemDetails.length; i++){
+	    	//alert($scope.itemDetails[i].poval);
+	    	poval = $scope.itemDetails[i].poval + poval;
+	    	
+	    	}
+	   // alert(poval);
+	    return poval;
+	   
+   }
+   
+   $scope.calculate_cgst = function(itemDetails)
+   {
+	   var cgst = 0;
+	    //alert($scope.itemDetails.length);
+	    for(var i = 0; i < $scope.itemDetails.length; i++){
+	    	//alert($scope.itemDetails[i].poval);
+	    	cgst = $scope.itemDetails[i].cgst + cgst;
+	    	
+	    	}
+	   // alert(poval);
+	    return cgst;
+	   
+   }
+   
+   $scope.calculate_sgst = function(itemDetails)
+   {
+	   var sgst = 0;
+	    //alert($scope.itemDetails.length);
+	    for(var i = 0; i < $scope.itemDetails.length; i++){
+	    	//alert($scope.itemDetails[i].poval);
+	    	sgst = $scope.itemDetails[i].sgst + sgst;
+	    	
+	    	}
+	   // alert(poval);
+	    return sgst;
+	   
+   }
+   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    $scope.submitForm = function(itemDetails)
+    {
+      //window.alert(itemDetails.length);
+      
+      
+        
+      $http({
+            url: '/submit/po',
+            method: "POST",
+            data: itemDetails,
+            headers: {'Content-Type': 'application/json'}
+            
+        }).then(function mySuccess(response) {
+        
+        $scope.reset(itemDetails);
+        $scope.status = "PO raised  successfully and po number is "  + response.data; 
+    }, function myError(response) {
+        $scope.myWelcome = response.statusText;
+    });
+      
+      };
+    
+    $scope.reset = function(itemDetails)
+    {
+  	 
+  	  
+  	  $scope.itemDetails = [
+        
+        {
+            'item':"",
+            'quantity':"",
+	        's1':"",
+	        's2':"",
+	        's3':"",
+	        'cgst':"",
+	        'sgst':"",
+	        'poval':"",
+            
+        }];
+  	  
+  	  
+  	  
+  	  
+  	  
+    }
+
+  });
+
+
+
+
+
+
+
+
+
+</script> 
+
+<div class="panel panel-default">{{status}}</div>
+    <h1 class="text-center"> Create New Order </h1>
+
+
+ <form id="myForm" name="poform" >
+
+
+ 
+ <table class ="table" >
+
+ 
+  
+  
+  
+                                    <tr>
+                                        <th><input type="checkbox" ng-model="selectedAll" ng-click="checkAll()" /></th>
+                                        <th>Item</th>
+                                        <th>Quantity</th>
+                                        <th>Primary Supplier </th>
+					<th>Secondary Supplier </th>
+					<th>Alternate Supplier </th>
+                                        
+                                    </tr>
+   
+
+                     <tr ng-repeat="itemDetail in itemDetails"  >
+                                        <td>
+                                            <input type="checkbox" ng-model="itemDetail.selected" /></td>
+                                            <td>
+                                            <select  ng-model="itemDetail.item" ng-options="x for x in items" ng-change="selectAction1(itemDetail)" class="form-control" name="item"> Select Item </select></td>
+                                            <td>
+                                            <input type="number" class="form-control" ng-model="itemDetail.quantity"  ng-change="selectAction2(itemDetail)" name= "quantity" required min='1' step ='1'/></td>
+                                        
+                                        
+                                        <td>
+                                            <input type="text"  class="form-control" ng-model="itemDetail.s1" name= "supplier1name"  readonly/></td>
+                                        <td>
+                                            <input type="text" class="form-control" ng-model="itemDetail.s2" name= "supplier2name"  readonly/></td>
+                                        <td>
+                                            <input type="text" class="form-control" ng-model="itemDetail.s3" name= "supplier3name"  readonly/></td>
+                                        
+                                        
+                                    </tr>
+
+                    <tr>
+
+                      <td><input  type="button" class="btn btn-danger pull-right" ng-click="remove()" value="Remove">
+                      </td>
+                      <td><input type="button" class="btn btn-primary addnew pull-right" value="AddNew" ng-click="addNew(itemDetail)">
+                      </td>
+                    </tr>
+
+
+
+
+
+<tr>
+ <td>
+  <label>SGST </label>
+ </td>
+ <td>
+
+ 
+  <input type= "text" name ="sgst" ng-model="sgst" ng-value = "calculate_sgst(itemDetails)"  ng-init = "sgst = 0" readonly>
+</td>
+ </tr>
+ <tr>
+ <td>
+    <label> CGST </label>
+  
+ </td>
+<td>
+  <input type = "text" ng-model= "cgst"  ng-value = "calculate_cgst(itemDetails)"   readonly>
+</td>
+ </tr>
+<tr>
+ <td>
+  
+<label> PO VALUE</label>
+  
+ </td>
+<td>
+ 
+  <input type = "text" ng-model="poval" name ="po-val" ng-value = "calculate_poval(itemDetails)"  " ng-init = "poval = 0 "  readonly>
+</td>
+ </tr>
+</table>
+
+
+  <div class="form-group">
+
+  <input type="submit" value="Submit" class="btn btn-success"  ng-click="submitForm(itemDetails)" ng-disabled="poform.$invalid"/>
+  <input type="reset" ng-click="reset()" value="Reset" class="btn btn-warning" />
+ </div>
+
+</form> 
+
+
+
+
+
+  </body>
+
+</html>
+

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Shop Item - Start Bootstrap Template</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!--Custom styles for this template >-->
+    <link href="css/shop-item.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+   <!-- <script src="app.js"></script>-->
+
+  </head>
+
+  <body  ng-app="myApp" ng-controller='retailerController'>
+
+
+ <script>
+
+var myapp = angular.module('myApp',[]);
+  myapp.controller('retailerController', function($scope,$http,$window) {
+ $scope.suppliers = [];
+ 
+ /*$http.get('/getpomaster')
+    .then(function(response) {
+        $scope.myWelcome = response.data;
+    });*/
+  
+  $http({
+      url: '/getSupplierNames',
+      method: "POST"
+  }).then(function mySuccess(response) {
+        for(var i=0;i<response.data.length;i++){
+		$scope.suppliers.push(response.data[i][0])
+	}
+    }, function myError(response) {
+        $scope.myWelcome = response.statusText;
+    });
+
+
+
+    $scope.supplierDetails = [];
+    
+    $scope.selectAction1 = function(supplier_name) {
+        //JSON.stringify({type:"item", "itemnumber":itemDetail.item})
+       console.log(supplier_name);
+       $scope.supplierDetails=[]
+        $http({
+            url: '/getSupplierId',
+            method: "POST",
+            data: {"name" : supplier_name}
+        }).then(function mySuccess(response) {
+              $scope.supplier_id= response.data;
+              console.log($scope.supplier_id);
+              $http({
+                 url: 'http://172.21.3.198:3000/api/PO',
+                 method: "GET"
+              }).then(function mySuccess(response){
+                        console.log(response.data)
+                        for(var i=0;i<response.data.length;i++){
+							var j=0
+							var found=false
+							var index=1
+							while(j<response.data[i].supplier_names.length && !found){
+									if(response.data[i].supplier_names[j].split("#")[1]==$scope.supplier_id.toString()){
+										found=true
+										index=index+j
+									}
+								j++;
+							}
+							if(found){
+								var quantity_submitted=null;
+								var quantity_approved=0;
+								if(response.data[i].status.toLowerCase()=="pending"){
+									for(var j=0;j<response.data[i].itemBySupplier.length;j++){
+										console.log(response.data[i].itemBySupplier[j].supplier_name.split("#")[1]);
+										console.log($scope.supplier_id.toString());
+										if(response.data[i].itemBySupplier[j].supplier_name.split("#")[1]==$scope.supplier_id.toString())
+											quantity_submitted=response.data[i].itemBySupplier[j].quantity
+											console.log(quantity_submitted)
+										}
+								}
+								else if (response.data[i].status.toLowerCase()=="approved"){
+									for(var j=0;j<response.data[i].approved.length;j++){
+										if(response.data[i].approved[j].supplier_name.split("#")[1]==$scope.supplier_id.toString())
+											quantity_approved=response.data[i].approved[j].quantity
+											console.log(quantity_approved)
+										}
+								}
+								
+							
+                                var options={
+                                        'supplier_name':$scope.supplier_id,
+                                        'poId':response.data[i].poId.split("_")[0],
+                                        'itemId':response.data[i].item_name,
+                                        'quantity':response.data[i].quantity,
+                                        'status':response.data[i].status,
+					'quantity_submitted':quantity_submitted,
+					'quantity_approved':quantity_approved,
+					'disabled':false,
+					'index':index,
+					'quantity_entered':null
+                                }
+                                $scope.supplierDetails.push(options)
+							}
+                        }
+                        console.log($scope.supplierDetails)
+                 });
+          });
+
+    };
+	
+    $scope.check=function(status,val){
+	if(status.toLowerCase()=="pending" && val==null)
+		return true;
+	return false;
+     }
+	$scope.check_pending=function(status,val){
+	if(status.toLowerCase()=="pending" && val!=null)
+		return true;
+	return false;
+     }
+	$scope.check_approved=function(status){
+	if(status.toLowerCase()!="pending")
+		return true;
+	return false;
+     }
+   $scope.submit=function(supplierDetail){
+	supplierDetail.quantity_submitted=supplierDetail.quantity_entered
+	$http({
+		url:"http://172.21.3.198:8081/itemBySupplier",
+		method:"POST",
+		data:{
+		"supplierId":$scope.supplier_id,
+		"poId":supplierDetail.poId,
+		"quantity":supplierDetail.quantity_entered,
+		"itemId":supplierDetail.itemId		
+    		}
+	       }).then(function mySuccess(response){
+				console.log(response);
+				supplierDetail.disabled=true;
+				$http({
+					url:"/updatePODetail",
+					method:"POST",
+					data:{
+						"index":supplierDetail.index,
+						"poId":supplierDetail.poId,
+						"quantity":supplierDetail.quantity_entered,
+						"itemId":supplierDetail.itemId					
+					}
+				}).then(function mySuccess(response){
+					console.log(response)
+					});
+				
+		   },function myError(myerror){
+				console.log(myerror);
+		   });
+	}    
+
+  });
+
+
+
+
+
+
+
+
+
+</script> 
+
+    <h1 class="text-center"> Supplier Information </h1>
+    <p class="text-left">Select Supplier:</p>
+	<select ng-model="supplier_name" ng-name="supplier" ng-options="x for x in suppliers" ng-change="selectAction1(supplier_name)">Select Supplier</select>	
+ 
+ 
+ 	<table class ="table" >
+
+ 
+  
+  
+  
+                                    <tr>
+                                        <th>S.No.</th>
+                                        <th>PoId</th>
+					<th>ItemId</th>
+                                        <th>Quantity</th>
+                                        <th>Status </th>
+                                        <th>Enter the Value</th>
+					<th>Submit</th>
+                                    </tr>
+   
+
+                     <tr ng-repeat="supplierDetail in supplierDetails"  >
+				    <td>{{ $index + 1 }}</td>
+                                    <td>{{ supplierDetail.poId }}</td>
+				    <td>{{ supplierDetail.itemId }}</td>
+				    <td>{{ supplierDetail.quantity }}</td>
+                                    <td>{{ supplierDetail.status }}</td>
+   				    <td ng-if="check(supplierDetail.status,supplierDetail.quantity_submitted)" ><input type="text" ng-disabled="supplierDetail.disabled" ng-model="supplierDetail.quantity_entered"/></td>
+				    <td ng-if="check_pending(supplierDetail.status,supplierDetail.quantity_submitted)">{{ supplierDetail.quantity_submitted }}</td>
+				    <td ng-if="check_approved(supplierDetail.status)">{{ supplierDetail.quantity_approved }}</td>
+					
+				    <td><input type="button" ng-if="check(supplierDetail.status,supplierDetail.quantity_submitted)" value="submit" ng-click="submit(supplierDetail)" ng-disabled="supplierDetail.disabled"/></td>                                     
+                     </tr>
+
+		</table> 
+	</body>
+</html>
+

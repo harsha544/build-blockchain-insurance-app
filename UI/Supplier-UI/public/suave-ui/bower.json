@@ -1,0 +1,35 @@
+{
+  "name": "Suave UI",
+  "version": "0.3.1",
+  "authors": [
+    "Semyon Vyskubov <sv@rv7.ru>"
+  ],
+  "description": "UI Framework for AngularJS",
+  "main": [
+    "dist/app.js",
+    "dist/styles-bower.css"
+  ],
+  "keywords": [
+    "angular",
+    "ui",
+    "framework",
+    "suave"
+  ],
+  "license": "MIT",
+  "homepage": "http://uoziod.github.io/suave-ui",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "components",
+    "demo",
+    "scripts",
+    "styles",
+    "templates",
+    "package.json"
+  ],
+  "dependencies": {
+    "animate.css": "~3.2.0",
+    "fontawesome": "~4.2.0"
+  }
+}

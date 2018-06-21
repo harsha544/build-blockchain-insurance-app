@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Landing Page - Start Bootstrap Theme</title>
+
+    
+
+
+   
+   
+
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+ 
+ <script src = "public/underscore.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+    <script src="../vendor/jquery/jquery.min.js"></script>
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans" />
+ 
+
+  </head>
+
+  <body  >
+
+
+    
+    
+    <div class="container">
+  <h1>Raised POs</h1>
+ 
+<script>
+
+//Demo of Searching Sorting and Pagination of Table with AngularJS - Advance Example
+
+var myApp = angular.module('myApp', []);
+
+//Not Necessary to Create Service, Same can be done in COntroller also as method like add() method
+myApp.service('filteredListService', function () {
+
+    this.searched = function (valLists, toSearch) {
+        return _.filter(valLists,
+
+        function (i) {
+            /* Search Text in all 3 fields */
+            return searchUtil(i, toSearch);
+        });
+    };
+
+    this.paged = function (valLists, pageSize) {
+        retVal = [];
+        for (var i = 0; i < valLists.length; i++) {
+            if (i % pageSize === 0) {
+                retVal[Math.floor(i / pageSize)] = [valLists[i]];
+            } else {
+                retVal[Math.floor(i / pageSize)].push(valLists[i]);
+            }
+        }
+        return retVal;
+    };
+
+});
+
+//Inject Custom Service Created by us and Global service $filter. This is one way of specifying dependency Injection
+var TableCtrl = myApp.controller('TableCtrl', function ($scope, $window,$http,$filter, filteredListService) {
+
+    $scope.pageSize = 4;
+    $scope.allItems = getDummyData();
+    $scope.reverse = false;
+
+    $scope.resetAll = function () {
+        $scope.filteredList = $scope.allItems;
+        $scope.newItmId = '';
+        $scope.newStatus= '';
+        $scope.newcgst = '';
+        $scope.newsgst = '';
+        $scope.poval = '';
+        $scope.searchText = '';
+        $scope.currentPage = 0;
+        $scope.Header = ['', '', ''];
+    }
+
+    $scope.add = function () {
+        $scope.allItems.push({
+            iId: $scope.newItmId,
+            cgst: $scope.newcgst,
+            sgst: $scope.newcgst,
+            status:$scope.newStatus,
+            poval :$scope.poval
+
+        });
+        $scope.resetAll();
+    }
+
+    $scope.search = function () {
+        $scope.filteredList = filteredListService.searched($scope.allItems, $scope.searchText);
+
+        if ($scope.searchText == '') {
+            $scope.filteredList = $scope.allItems;
+        }
+        $scope.pagination();
+    }
+
+    // Calculate Total Number of Pages based on Search Result
+    $scope.pagination = function () {
+        $scope.ItemsByPage = filteredListService.paged($scope.filteredList, $scope.pageSize);
+    };
+
+    $scope.setPage = function () {
+        $scope.currentPage = this.n;
+    };
+
+    $scope.firstPage = function () {
+        $scope.currentPage = 0;
+    };
+
+    $scope.lastPage = function () {
+        $scope.currentPage = $scope.ItemsByPage.length - 1;
+    };
+
+    $scope.range = function (input, total) {
+        var ret = [];
+        if (!total) {
+            total = input;
+            input = 0;
+        }
+        for (var i = input; i < total; i++) {
+            if (i != 0 && i != total - 1) {
+                ret.push(i);
+            }
+        }
+        return ret;
+    };
+
+    $scope.sort = function (sortBy) {
+        $scope.resetAll();
+
+        $scope.columnToOrder = sortBy;
+
+        //$Filter - Standard Service
+        $scope.filteredList = $filter('orderBy')($scope.filteredList, $scope.columnToOrder, $scope.reverse);
+
+        if ($scope.reverse) iconName = 'glyphicon glyphicon-chevron-up';
+        else iconName = 'glyphicon glyphicon-chevron-down';
+
+        if (sortBy === 'iId') {
+            $scope.Header[0] = iconName;
+        } else if (sortBy === 'poval') {
+            $scope.Header[1] = iconName;
+        } else {
+            $scope.Header[2] = iconName;
+        }
+
+        $scope.reverse = !$scope.reverse;
+
+        $scope.pagination();
+    };
+
+    //By Default sort ny Name
+    $scope.sort('iId');
+
+});
+
+function searchUtil(item, toSearch) {
+    /* Search Text in all 3 fields */
+    return (item.iId.toLowerCase().indexOf(toSearch.toLowerCase()) > -1 || item.sgst.toLowerCase().indexOf(toSearch.toLowerCase()) > -1 || item.poval == toSearch) ? true : false;
+}
+
+/*Get Dummy Data for Example*/
+function getDummyData() {
+    /*return [{
+        iId: 2,
+        cgst: '1234',
+        sgst: 'dfg',
+        poval:'deg',
+        status:'pending'
+    }, {
+        iId: 3,
+        cgst: '1234',
+        sgst: 'dfg',
+        poval:'deg',
+        status:'pending'
+        
+    }, {
+       iId: 4,
+        cgst: '1234',
+        sgst: 'dfg',
+        poval:'deg',
+        status:'pending'
+    }, {
+        iId: 5,
+        cgst: '1234',
+        sgst: 'dfg',
+        poval:'deg',
+        status:'pending'
+    }, {
+        iId: 6,
+        cgst: '1234',
+        sgst: 'dfg',
+        poval:'deg',
+        status:'approved'
+    }, {
+        iId: 7,
+        cgst: '1234',
+        sgst: 'dfg',
+        poval:'deg',
+        status:'pending'
+    }, {
+       iId: 8,
+        cgst: '1234',
+        sgst: 'dfg',
+        poval:'deg',
+        status:'pending'
+    }, {
+       iId: 9,
+        cgst: '1234',
+        sgst: 'dfg',
+        poval:'deg',
+        status:'Approved'
+    }, {
+        iId: 10,
+        cgst: '1234',
+        sgst: 'dfg',
+        poval:'deg',
+        status:'pending'
+    }, {
+        iId: 11,
+        cgst: '1234',
+        sgst: 'dfg',
+        poval:'deg',
+        status:'pending'
+    }, {
+        iId: 12,
+        cgst: '1234',
+        sgst: 'dfg',
+        poval:'deg',
+        status:'pending'
+    }, {
+        iId: 13,
+        cgst: '1234',
+        sgst: 'dfg',
+        poval:'deg',
+        status:'pending'
+    }];*/
+    window.alert("in data");
+    $http.get('/getpomaster')
+    .then(function(response) {
+        $scope.myWelcome = response.data;
+    });
+}
+
+
+
+</script>
+
+<br />
+<br />
+<div ng-app="myApp">
+    <div ng-controller="TableCtrl">
+        <div class="input-group">
+            <input class="form-control" ng-model="searchText" placeholder="Search" type="search" ng-change="search()" /> <span class="input-group-addon">
+      <span class="glyphicon glyphicon-search"></span>
+</span>
+        </div>
+        <table class="table  table-hover data-table myTable">
+            <thead>
+                <tr>
+                    <th class="iId"> <a href="#" ng-click="sort('iId',$event)">Item Id
+                         <span class="{{Header[0]}}"></span>
+                         </a>
+
+                    </th>
+                    <th class="sgst"> <a ng-click="sort('sgst')" href="#"> SGST
+                         <span class="{{Header[1]}}"></span></a>
+                    </th>
+                    <th class="cgst"> <a ng-click="sort('cgst')" href="#"> CGST
+                     <span class="{{Header[2]}}"></span></a>
+                    </th>
+                    <th class="poval"> <a ng-click="sort('poval')" href="#"> PO Value
+                     <span class="{{Header[2]}}"></span></a>
+                    </th>
+                    <th class="status"> <a ng-click="sort('status')" href="#"> Status
+                     <span class="{{Header[2]}}"></span></a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in ItemsByPage[currentPage] | orderBy:columnToOrder:reverse">
+                    <td>{{item.iId}}</td>
+                    <td>{{item.cgst}}</td>
+                    <td>{{item.sgst}}</td>
+                    <td>{{item.poval}}</td>
+                    <td>{{item.status}}</td>
+
+                </tr>
+            </tbody>
+        </table>
+        <ul class="pagination pagination-sm">
+            <li ng-class="{active:0}"><a href="#" ng-click="firstPage()">First</a>
+
+            </li>
+            <li ng-repeat="n in range(ItemsByPage.length)"> <a href="#" ng-click="setPage()" ng-bind="n+1">1</a>
+
+            </li>
+            <li><a href="#" ng-click="lastPage()">Last</a>
+
+            </li>
+        </ul>
+        <div class="row">
+            <div class="col-xs-3">
+                <input type="text" ng-model="newEmpId" class="form-control" placeholder="EmpId">
+            </div>
+            <div class="col-xs-3">
+                <input type="text" ng-model="newName" class="form-control" placeholder="Name">
+            </div>
+            <div class="col-xs-4">
+                <input type="email" ng-model="newEmail" class="form-control" placeholder="Email">
+            </div>
+            <div class="col-xs-1">
+                <button ng-click="add()" type="button" class="btn btn-primary"> <span class="glyphicon glyphicon-plus"></span>
+
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Ends Controller -->
+</div>
+
+  </body>
+
+</html>

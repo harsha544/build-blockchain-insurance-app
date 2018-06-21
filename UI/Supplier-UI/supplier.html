@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Shop Item - Start Bootstrap Template</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!--Custom styles for this template >-->
+    <link href="css/shop-item.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+   <!-- <script src="app.js"></script>-->
+
+  </head>
+
+  <body  ng-app="myApp" ng-controller='retailerController'>
+
+
+ <script>
+
+var myapp = angular.module('myApp',[]);
+  myapp.controller('retailerController', function($scope,$http,$window) {
+ $scope.suppliers = ["Adidas"];
+ 
+ /*$http.get('/getpomaster')
+    .then(function(response) {
+        $scope.myWelcome = response.data;
+    });*/
+  
+  /*$http({
+      url: '/getitemlist',
+      method: "POST",
+      data: "send item list",
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+  }).then(function mySuccess(response) {
+        $scope.items = response.data;
+    }, function myError(response) {
+        $scope.myWelcome = response.statusText;
+    });
+   */
+
+
+
+    $scope.supplierDetails = [];
+    
+    $scope.selectAction1 = function(supplier_name) {
+    	//JSON.stringify({type:"item", "itemnumber":itemDetail.item})
+       console.log(supplier_name);
+       $scope.supplierDetails=[]
+        $http({
+            url: '/getSupplierId',
+            method: "POST",
+	    data: {"name" : supplier_name}        	
+        }).then(function mySuccess(response) {
+              $scope.supplier_id= response.data;
+              console.log($scope.supplier_id);
+	      $http({
+		 url: 'http://172.21.3.198:3000/api/PO',
+		 method: "GET"	
+	      }).then(function mySuccess(response){
+			console.log(response.data)
+			for(var i=0;i<response.data.length;i++){
+				var options={
+					'supplier_name':$scope.supplier_id,
+					'poId':response.data[i].poId.split("_")[0],
+					'itemId':response.data[i].item_name,
+					'quantity':response.data[i].quantity,
+					'status':response.data[i].status
+				}
+				$scope.supplierDetails.push(options)	
+			}
+			console.log($scope.supplierDetails)
+		 });
+          });
+
+    };
+    $scope.check=function(status){
+	if(status.toLowerCase()=="pending")
+		return true;
+	return false;
+     }
+   $scope.submit=function(poId,itemId,quantity){
+	$http({
+		url:"http://172.21.3.198:8081/itemBySupplier",
+		method:"POST",
+		data:{
+		"supplierId":$scope.supplier_id,
+		"poId":poId,
+		"quantity":quantity,
+		"itemId":itemId		
+    		}
+	       });
+	}    
+
+  });
+
+
+
+
+
+
+
+
+
+</script> 
+
+    <h1 class="text-center"> Supplier Information </h1>
+    <p class="text-left">Select Supplier:</p>
+	<select ng-model="supplier_name" ng-name="supplier" ng-options="x for x in suppliers" ng-change="selectAction1(supplier_name)">Select Supplier</select>	
+ 
+ 
+ 	<table class ="table" >
+
+ 
+  
+  
+  
+                                    <tr>
+                                        <th>S.No.</th>
+                                        <th>PoId</th>
+					<th>ItemId</th>
+                                        <th>Quantity</th>
+                                        <th>Status </th>
+                                        <th>Enter the Value</th>
+					<th>Submit</th>
+                                    </tr>
+   
+
+                     <tr ng-repeat="supplierDetail in supplierDetails"  >
+				    <td>{{ $index + 1 }}</td>
+                                    <td>{{ supplierDetail.poId }}</td>
+				    <td>{{ supplierDetail.itemId }}</td>
+				    <td>{{ supplierDetail.quantity }}</td>
+                                    <td>{{ supplierDetail.status }}</td>
+   				    <td><input type="text" ng-if="check(supplierDetail.status)" /></td>
+				    <td><input type="button" ng-if="check(supplierDetail.status)" value="submit" ng-click="submit(supplierDetail.poId,supplierDetail.itemId,supplierDetail.quantity)"/></td>                                     
+                     </tr>
+
+		</table> 
+	</body>
+</html>
+
