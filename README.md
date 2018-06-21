@@ -75,7 +75,8 @@ cp composer/supplier-retailer.json composer/supplier-retailer_org.json
 
 Update this block of code between sections version and channels, via which we enforce timeout period in *supplier-retailer_org.json*
 
-```    "client": { 
+```
+"client": { 
         "organization": "Supplier1Org",
         "connection": { 
             "timeout": { 
