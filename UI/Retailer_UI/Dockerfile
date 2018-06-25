@@ -16,6 +16,6 @@ RUN unzip instantclient-basic-linux.leppc64.c64-12.2.0.1.0.zip && \
 
 ENV LD_LIBRARY_PATH=/opt/Retailer-UI/instantclient_12_2
 
-EXPOSE 8081
+EXPOSE 8080
 
 CMD ["node", "server.js"]
