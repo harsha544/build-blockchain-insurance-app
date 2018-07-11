@@ -49,7 +49,7 @@ app.post('/addPO', async function (req, res) {
         console.log("Error");
 	res.end("Error")
     });
-       res.end("Succesfully send data");
+       res.end("Succesfully sent data");
 })
 
 app.post('/addSupplier', async function (req, res) {
@@ -78,7 +78,7 @@ app.post('/addSupplier', async function (req, res) {
         console.log("Error");
 	res.end("Error")
     });
-       res.end("Succesfully send data");
+       res.end("Succesfully sent data");
 })
 
 
@@ -114,7 +114,7 @@ app.post('/itemBySupplier', async function (req, res) {
         console.log("Error");
 	res.end("Error");
     });
-       res.end("Succesfully send data");
+       res.end("Succesfully sent data");
 })
 
 
@@ -146,7 +146,7 @@ app.post('/closePO', async function (req, res) {
         console.log("Error");
 	res.end("Error");
     });
-       res.end("Succesfully send data");
+       res.end("Succesfully sent data");
 })
 
 
