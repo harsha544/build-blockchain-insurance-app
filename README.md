@@ -1,5 +1,42 @@
-## Status 
-[![GitHub forks](https://img.shields.io/github/forks/badges/shields.svg?style=social&label=Fork)](https://github.com/harsha544/supplier-retailer-app/)  [![GitHub release](https://img.shields.io/github/release/qubyte/rubidium.svg?style=social)](https://github.com/harsha544/supplier-retailer-app/)  [![GitHub Release Date](https://img.shields.io/github/release-date/SubtitleEdit/subtitleedit.svg?style=social)](https://github.com/harsha544/supplier-retailer-app/)
+Prerequisites
+---------------
+
+Before we begin, if you haven’t already done so, you may wish to check that you have all the prerequisites below installed on the platform(s) on which you’ll be setting up supplier-retailer-app.
+
+#### Install nvm
+----------------
+To install nvm, you can do this using cURL:
+
+```sh
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+```
+
+or Wget:
+
+```sh
+wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+```
+
+#### Install python
+----------------
+
+To python 2.X on Ubuntu, do this:
+
+```sh
+apt install python2.7
+```
+
+#### Docker & docker-compose
+----------------
+Ensure you have following version of docker & docker-compose 
+
+* Docker Engine : 18.03
+* docker-compose : > 1.11.0 
+
+
+
+Bootstrapping the Environment
+---------------
 
 #### Step1: Clone the repository
 -------------
@@ -17,31 +54,23 @@ cd supplier-retailer-app
 
 sh build_ubuntu.sh
 
-#### Step 4: Install Composer via nvm
--------------
-
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
-
-#### Step 5 : Install Node
+#### Step 4: Use Node v8.11.2
 -------------
 
 nvm install v8.11.2
 
-#### Step 6: Installing composer utilities
+#### Step 5: Installing composer utilities
 -------------
 
-cd $HOME<br>
-npm install composer-cli<br>
-npm install composer-rest-server<br>
-npm install composer-playground<br>
+npm install
 
-#### Step 7: Update PATH to include composer binaries
+#### Step 6: Update PATH to include composer binaries
 -------------
 
 cd $HOME/<br>
 export PATH=$PATH:$PWD/node_modules/.bin/<br>
 
-#### Step 8: Update Supplier-Peer PEM Values in $PWD/composer/supplier-retailer.json
+#### Step 7: Update Supplier-Peer PEM Values in $PWD/composer/supplier-retailer.json
 -------------
 
 cd $HOME/supplier-retailer-app<br>
@@ -63,7 +92,7 @@ Open *composer/supplier-retailer.json* and update<br>
 with supplier$i values from above respectively.<br>
 
 
-#### Step 9: Update Orderer PEM Values in $PWD/composer/supplier-retailer.json
+#### Step 8: Update Orderer PEM Values in $PWD/composer/supplier-retailer.json
 -------------
 
 awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' cli/peers/ordererOrganizations/orderer-org/orderers/orderer0/tls/ca.crt > composer/orderer-ca.crt <br>
@@ -71,7 +100,7 @@ cat composer/orderer-ca.crt <br>
 Open *composer/supplier-retailer.json* and update **INSERT_ORDERER_CA_CERT** with above value <br>
 
 
-#### Step 10:  Customizing the connection profile for respective supplier organization
+#### Step 9:  Customizing the connection profile for respective supplier organization
 -------------
 
 cp composer/supplier-retailer.json composer/supplier-retailer_org.json
@@ -100,7 +129,7 @@ cp composer/supplier-retailer_org.json composer/supplier2Peer/supplier-retailer_
 cp composer/supplier-retailer_org.json composer/supplier3Peer/supplier-retailer_org3.json <br>
 
 
-#### Step 11: Locating the certificate and private key for the Hyperledger Fabric administrator for each Supplier 
+#### Step 10: Locating the certificate and private key for the Hyperledger Fabric administrator for each Supplier 
 -------------
 
 Locating certificates files respective supplier i.e identifying public part of identity for the users usually found under signcerts  <br>
@@ -121,7 +150,7 @@ cp -p $ORG2/keystore/*_sk composer/supplier2Peer/ <br>
 cp -p $ORG3/keystore/*_sk composer/supplier3Peer/ <br>
 
 
-#### Step 12: Creating business network cards for the Hyperledger Fabric administrator for all Orgs
+#### Step 11: Creating business network cards for the Hyperledger Fabric administrator for all Orgs
 -------------
 
 
@@ -132,7 +161,7 @@ cp -p $ORG3/keystore/*_sk composer/supplier3Peer/ <br>
 * composer card create -p supplier3Peer/supplier-retailer-org3.json -u PeerAdmin -c supplier3Peer/Admin@supplier3-org-cert.pem -k supplier3Peer/*_sk -r PeerAdmin -r ChannelAdmin -f PeerAdmin@supplier-retailer-org3.card <br>
 
 
-#### Step 13: Importing the business network cards for the Hyperledger Fabric administrator for all Orgs
+#### Step 12: Importing the business network cards for the Hyperledger Fabric administrator for all Orgs
 -------------
 
 composer card import -f supplier1Peer/PeerAdmin@supplier1.card --card PeerAdmin@supplier-retailer-org1 <br>
@@ -142,7 +171,7 @@ composer card import -f supplier3Peer/PeerAdmin@supplier3.card --card PeerAdmin@
 Issue *composer card list* to verify whether cards have been imported successfully or not <br>
 
 
-#### Step 14: Installing the business network onto the Hyperledger Fabric peer nodes
+#### Step 13: Installing the business network onto the Hyperledger Fabric peer nodes
 -------------
 
 cd ../chaincode/composer/ <br>
