@@ -20,7 +20,7 @@ wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh |
 #### Install python
 ----------------
 
-To python 2.X on Ubuntu, do this:
+To install python 2.X on Ubuntu, do this:
 
 ```sh
 apt install python2.7
