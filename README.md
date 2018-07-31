@@ -30,8 +30,8 @@ apt install python2.7
 ----------------
 Ensure you have following version of docker & docker-compose 
 
-* Docker Engine : 18.03
-* docker-compose : > 1.11.0 
+* Docker Engine :  18.03 or above
+* docker-compose : 1.11.0 or above
 
 
 
@@ -182,6 +182,7 @@ composer network install --card PeerAdmin@supplier-retailer-org1 --archiveFile r
 composer network install --card PeerAdmin@supplier-retailer-org2 --archiveFile retailer-supplier@0.0.1.bna <br>
 composer network install --card PeerAdmin@supplier-retailer-org3 --archiveFile retailer-supplier@0.0.1.bna <br>
 
+
 #### Step 14: Starting the business network
 -------------
 
@@ -194,10 +195,14 @@ composer network start -n retailer-supplier -A admin -S adminpw -V 0.0.2-deploy.
 cd $HOME/supplier-retailer-app/chaincode/composer/ <br>
 composer card import -f admin@retailer-supplier.card <br>
 
-#### Step 16: Installing the REST server
+
+#### Step 16: Generating the REST APIs server
 -------------
 
 cd $HOME/supplier-retailer-app/composer  <br>
+
+Invoke *composer-rest-server* to invoke REST Server accessible on *http://localhost:8080*
+
 composer-rest-server  <br>
 ? Enter the name of the business network card to use: admin@retailer-supplier  <br>
 ? Specify if you want namespaces in the generated REST API: never use namespaces  <br>
@@ -206,5 +211,8 @@ composer-rest-server  <br>
 ? Specify if you want to enable event publication over WebSockets: Yes  <br>
 ? Specify if you want to enable TLS security for the REST API: No  <br>
 
+#### Step 17: Start DCN Notifications services in background
+-------------
 
-
+cd $HOME/supplier-retailer-app/python/
+nohup python database_change_notification_update_insert.py 2>&1 &1
