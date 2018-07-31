@@ -201,15 +201,17 @@ composer card import -f admin@retailer-supplier.card <br>
 
 cd $HOME/supplier-retailer-app/composer  <br>
 
-Invoke *composer-rest-server* to invoke REST Server accessible on *http://localhost:8080*
+Invoke *composer-rest-server* to start REST Server on *http://localhost:8080*
 
+``` 
 composer-rest-server  <br>
-? Enter the name of the business network card to use: admin@retailer-supplier  <br>
-? Specify if you want namespaces in the generated REST API: never use namespaces  <br>
-? Specify if you want to use an API key to secure the REST API: No  <br>
-? Specify if you want to enable authentication for the REST API using Passport: No  <br>
-? Specify if you want to enable event publication over WebSockets: Yes  <br>
-? Specify if you want to enable TLS security for the REST API: No  <br>
+? Enter the name of the business network card to use: admin@retailer-supplier
+? Specify if you want namespaces in the generated REST API: never use namespaces
+? Specify if you want to use an API key to secure the REST API: No
+? Specify if you want to enable authentication for the REST API using Passport: No
+? Specify if you want to enable event publication over WebSockets: Yes
+? Specify if you want to enable TLS security for the REST API: No
+```
 
 #### Step 17: Start DCN Notifications services in background
 -------------
