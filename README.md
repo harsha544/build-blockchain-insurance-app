@@ -146,7 +146,9 @@ cp -p $ORG3/signcerts/A*.pem composer/supplier3Peer/ <br>
 Identify private key for the user which is used for signing transactions and found under keystore <br>
 
 cp -p $ORG1/keystore/*_sk composer/supplier1Peer/ <br>
+
 cp -p $ORG2/keystore/*_sk composer/supplier2Peer/ <br>
+
 cp -p $ORG3/keystore/*_sk composer/supplier3Peer/ <br>
 
 
