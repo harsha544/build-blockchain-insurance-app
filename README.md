@@ -177,8 +177,34 @@ Issue *composer card list* to verify whether cards have been imported successful
 #### Step 13: Installing the business network onto the Hyperledger Fabric peer nodes
 -------------
 
-cd ../chaincode/composer/ <br>
+cd $HOME/supplier-retailer-app/chaincode/composer/ <br>
 composer network install --card PeerAdmin@supplier-retailer-org1 --archiveFile retailer-supplier@0.0.1.bna <br>
 composer network install --card PeerAdmin@supplier-retailer-org2 --archiveFile retailer-supplier@0.0.1.bna <br>
 composer network install --card PeerAdmin@supplier-retailer-org3 --archiveFile retailer-supplier@0.0.1.bna <br>
+
+#### Step 14: Starting the business network
+-------------
+
+cd $HOME/supplier-retailer-app/composer <br>
+composer network start -n retailer-supplier -A admin -S adminpw -V 0.0.2-deploy.6 -c PeerAdmin@supplier-retailer-org1 <br>
+
+
+#### Step 15: Importing a business network card to access the business network
+-------------
+cd $HOME/supplier-retailer-app/chaincode/composer/ <br>
+composer card import -f admin@retailer-supplier.card <br>
+
+#### Step 16: Installing the REST server
+-------------
+
+cd $HOME/supplier-retailer-app/composer  <br>
+composer-rest-server  <br>
+? Enter the name of the business network card to use: admin@retailer-supplier  <br>
+? Specify if you want namespaces in the generated REST API: never use namespaces  <br>
+? Specify if you want to use an API key to secure the REST API: No  <br>
+? Specify if you want to enable authentication for the REST API using Passport: No  <br>
+? Specify if you want to enable event publication over WebSockets: Yes  <br>
+? Specify if you want to enable TLS security for the REST API: No  <br>
+
+
 
