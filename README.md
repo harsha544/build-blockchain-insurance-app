@@ -204,7 +204,7 @@ cd $HOME/supplier-retailer-app/composer  <br>
 Invoke *composer-rest-server* to start REST Server on *http://localhost:8080*
 
 ``` 
-composer-rest-server  <br>
+composer-rest-server
 ? Enter the name of the business network card to use: admin@retailer-supplier
 ? Specify if you want namespaces in the generated REST API: never use namespaces
 ? Specify if you want to use an API key to secure the REST API: No
