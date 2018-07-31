@@ -214,5 +214,5 @@ composer-rest-server  <br>
 #### Step 17: Start DCN Notifications services in background
 -------------
 
-cd $HOME/supplier-retailer-app/python/
-nohup python database_change_notification_update_insert.py 2>&1 &1
+cd $HOME/supplier-retailer-app/python/  <br>
+nohup python database_change_notification_update_insert.py 2>&1 &1  <br>
