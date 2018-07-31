@@ -75,13 +75,13 @@ export PATH=$PATH:$PWD/node_modules/.bin/<br>
 
 cd $HOME/supplier-retailer-app<br>
 
-* awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' cli/peers/peerOrganizations/supplier1-org/peers/supplier1-peer/tls/ca.crt > composer/supplier1Peer/supplier1-ca.txt <br>
+* awk 'NF {sub(/\r/, ""); printf "%s\\\n",$0;}' cli/peers/peerOrganizations/supplier1-org/peers/supplier1-peer/tls/ca.crt > composer/supplier1Peer/supplier1-ca.txt <br>
 cat composer/supplier1Peer/supplier1-ca.txt<br>
 
-* awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' cli/peers/peerOrganizations/supplier2-org/peers/supplier2-peer/tls/ca.crt > composer/supplier2Peer/supplier2-ca.txt<br>
+* awk 'NF {sub(/\r/, ""); printf "%s\\\n",$0;}' cli/peers/peerOrganizations/supplier2-org/peers/supplier2-peer/tls/ca.crt > composer/supplier2Peer/supplier2-ca.txt<br>
 cat composer/supplier2Peer/supplier2-ca.txt<br>
 
-* awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' cli/peers/peerOrganizations/supplier3-org/peers/supplier3-peer/tls/ca.crt > composer/supplier3Peer/supplier3-ca.txt<br>
+* awk 'NF {sub(/\r/, ""); printf "%s\\\n",$0;}' cli/peers/peerOrganizations/supplier3-org/peers/supplier3-peer/tls/ca.crt > composer/supplier3Peer/supplier3-ca.txt<br>
 cat composer/supplier3Peer/supplier3-ca.txt<br>
 
 for i in 1 2 3 ; do  printf "\n supplier$i \n"; cat composer/supplier"$i"Peer/supplier"$i"-ca.txt 
@@ -95,7 +95,7 @@ with supplier$i values from above respectively.<br>
 #### Step 8: Update Orderer PEM Values in $PWD/composer/supplier-retailer.json
 -------------
 
-awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' cli/peers/ordererOrganizations/orderer-org/orderers/orderer0/tls/ca.crt > composer/orderer-ca.crt <br>
+awk 'NF {sub(/\r/, ""); printf "%s\\\n",$0;}' cli/peers/ordererOrganizations/orderer-org/orderers/orderer0/tls/ca.crt > composer/orderer-ca.crt <br>
 cat composer/orderer-ca.crt <br>
 Open *composer/supplier-retailer.json* and update **INSERT_ORDERER_CA_CERT** with above value <br>
 
