@@ -159,9 +159,9 @@ cd $HOME/supplier-retailer-app/composer/
 
 * composer card create -p supplier1Peer/supplier-retailer-org1.json -u PeerAdmin -c supplier1Peer/Admin@supplier1-org-cert.pem -k supplier1Peer/*_sk -r PeerAdmin -r ChannelAdmin -f supplier1Peer/PeerAdmin@supplier-retailer-org1.card <br>
 
-* composer card create -p supplier2Peer/supplier-retailer-org2.json -u PeerAdmin -c supplier2Peer/Admin@supplier2-org-cert.pem -k supplier2Peer/*_sk -r PeerAdmin -r ChannelAdmin -f supplier1Peer/PeerAdmin@supplier-retailer-org2.card <br>
+* composer card create -p supplier2Peer/supplier-retailer-org2.json -u PeerAdmin -c supplier2Peer/Admin@supplier2-org-cert.pem -k supplier2Peer/*_sk -r PeerAdmin -r ChannelAdmin -f supplier2Peer/PeerAdmin@supplier-retailer-org2.card <br>
 
-* composer card create -p supplier3Peer/supplier-retailer-org3.json -u PeerAdmin -c supplier3Peer/Admin@supplier3-org-cert.pem -k supplier3Peer/*_sk -r PeerAdmin -r ChannelAdmin -f supplier1Peer/PeerAdmin@supplier-retailer-org3.card <br>
+* composer card create -p supplier3Peer/supplier-retailer-org3.json -u PeerAdmin -c supplier3Peer/Admin@supplier3-org-cert.pem -k supplier3Peer/*_sk -r PeerAdmin -r ChannelAdmin -f supplier3Peer/PeerAdmin@supplier-retailer-org3.card <br>
 
 
 #### Step 12: Importing the business network cards for the Hyperledger Fabric administrator for all Orgs
