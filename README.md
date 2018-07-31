@@ -167,9 +167,9 @@ cd $HOME/supplier-retailer-app/composer/
 #### Step 12: Importing the business network cards for the Hyperledger Fabric administrator for all Orgs
 -------------
 
-composer card import -f supplier1Peer/PeerAdmin@supplier1.card --card PeerAdmin@supplier-retailer-org1 <br>
-composer card import -f supplier2Peer/PeerAdmin@supplier2.card --card PeerAdmin@supplier-retailer-org2 <br>
-composer card import -f supplier3Peer/PeerAdmin@supplier3.card --card PeerAdmin@supplier-retailer-org3 <br>
+composer card import -f supplier1Peer/PeerAdmin@supplier-retailer-org1.card --card PeerAdmin@supplier-retailer-org1 <br>
+composer card import -f supplier2Peer/PeerAdmin@supplier-retailer-org2.card --card PeerAdmin@supplier-retailer-org2 <br>
+composer card import -f supplier3Peer/PeerAdmin@supplier-retailer-org3.card --card PeerAdmin@supplier-retailer-org3 <br>
 
 Issue *composer card list* to verify whether cards have been imported successfully or not <br>
 
