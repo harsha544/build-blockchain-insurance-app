@@ -155,6 +155,7 @@ cp -p $ORG3/keystore/*_sk composer/supplier3Peer/ <br>
 #### Step 11: Creating business network cards for the Hyperledger Fabric administrator for all Orgs
 -------------
 
+cd $HOME/supplier-retailer-app/composer/
 
 * composer card create -p supplier1Peer/supplier-retailer-org1.json -u PeerAdmin -c supplier1Peer/Admin@supplier1-org-cert.pem -k supplier1Peer/*_sk -r PeerAdmin -r ChannelAdmin -f PeerAdmin@supplier-retailer-org1.card <br>
 
