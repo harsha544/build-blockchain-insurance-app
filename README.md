@@ -124,9 +124,9 @@ Update this block of code between sections version and channels, via which we en
 ```
 Copy above generated supplier-retailer_org.json to respective supplierXPeer 
 
-cp composer/supplier-retailer_org.json composer/supplier1Peer/supplier-retailer_org1.json <br>
-cp composer/supplier-retailer_org.json composer/supplier2Peer/supplier-retailer_org2.json <br>
-cp composer/supplier-retailer_org.json composer/supplier3Peer/supplier-retailer_org3.json <br>
+cp composer/supplier-retailer_org.json composer/supplier1Peer/supplier-retailer-org1.json <br>
+cp composer/supplier-retailer_org.json composer/supplier2Peer/supplier-retailer-org2.json <br>
+cp composer/supplier-retailer_org.json composer/supplier3Peer/supplier-retailer-org3.json <br>
 
 
 #### Step 10: Locating the certificate and private key for the Hyperledger Fabric administrator for each Supplier 
