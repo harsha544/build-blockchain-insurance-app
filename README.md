@@ -109,7 +109,7 @@ Update this block of code between sections version and channels, via which we en
 
 ```
 "client": { 
-        "organization": "Supplier1Org",
+        "organization": "SupplierXOrg",
         "connection": { 
             "timeout": { 
                 "peer": { 
@@ -128,6 +128,8 @@ cp composer/supplier-retailer_org.json composer/supplier1Peer/supplier-retailer-
 cp composer/supplier-retailer_org.json composer/supplier2Peer/supplier-retailer-org2.json <br>
 cp composer/supplier-retailer_org.json composer/supplier3Peer/supplier-retailer-org3.json <br>
 
+#### P.S 
+Ensure you update ``` "organization": "SupplierXOrg" ``` for respective Supplier accordingly in each supplier-retailer-orgX.json , where X=1,2,3
 
 #### Step 10: Locating the certificate and private key for the Hyperledger Fabric administrator for each Supplier 
 -------------
