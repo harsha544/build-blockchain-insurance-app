@@ -1,4 +1,4 @@
-FROM hyperledger/fabric-ca:ppc64le-1.1.0
+FROM hyperledger/fabric-ca:s390x-1.1.0
 
 RUN mkdir /ca
 COPY fabric-ca-server-config.yaml /ca

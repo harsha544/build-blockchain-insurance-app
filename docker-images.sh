@@ -22,8 +22,8 @@ dockerCaPull() {
 dockerCouchDBPull() {
       echo "==> FABRIC COUCHDB IMAGE"
       echo
-      docker pull hyperledger/fabric-couchdb:ppc64le-0.4.8
-      docker tag hyperledger/fabric-couchdb:ppc64le-0.4.8 hyperledger/fabric-couchdb
+      docker pull hyperledger/fabric-couchdb:s390x-0.4.8
+      docker tag hyperledger/fabric-couchdb:s390x-0.4.8 hyperledger/fabric-couchdb
 }
 
 BUILD=
@@ -45,8 +45,8 @@ else
 fi
 
 if [ $DOWNLOAD ]; then
-    : ${CA_TAG:="ppc64le-1.1.0"}
-    : ${FABRIC_TAG:="ppc64le-1.1.0"}
+    : ${CA_TAG:="s390x-1.1.0"}
+    : ${FABRIC_TAG:="s390x-1.1.0"}
 
     echo "===> Pulling fabric Images"
     dockerFabricPull ${FABRIC_TAG}

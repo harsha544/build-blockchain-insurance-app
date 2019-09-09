@@ -1,4 +1,4 @@
-FROM hyperledger/fabric-orderer:ppc64le-1.1.0
+FROM hyperledger/fabric-orderer:s390x-1.1.0
 
 RUN mkdir /orderer
 COPY crypto /orderer/crypto
